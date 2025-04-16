@@ -1,5 +1,6 @@
 import "dotenv/config"
 import express, { json } from "express"
+import path from "path"
 
 const app = express()
 
@@ -8,7 +9,7 @@ app.get("/api", (req, res) => {
   res.send("Hello World!")
 })
 
-const frontendLocation = __dirname + "/../../frontend"
+const frontendLocation = path.join(__dirname, "..", "..", "frontend")
 
 console.log(frontendLocation)
 
