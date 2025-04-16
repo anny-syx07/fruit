@@ -2,6 +2,7 @@ import "dotenv/config"
 import express, { json } from "express"
 import path from "path"
 import { fileURLToPath } from "url"
+import { existsSync } from "fs"
 
 const app = express()
 
@@ -17,6 +18,8 @@ app.get("/api", (req, res) => {
 const frontendLocation = path.join(__dirname, "..", "..", "frontend")
 
 console.log(frontendLocation)
+console.log(path.join(frontendLocation, "p5", "p5.js"))
+console.log(existsSync(path.join(frontendLocation, "p5", "p5.js")))
 
 // serve files from /frontend
 app.use("/", express.static(frontendLocation))
