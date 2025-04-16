@@ -7,9 +7,6 @@ package-lock.json
 # TypeScript build outputs
 dist/
 build/
-*.js
-*.js.map
-*.d.ts
 
 # Logs
 logs/
