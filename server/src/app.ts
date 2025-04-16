@@ -18,7 +18,7 @@ app.use("/", express.static(frontendLocation))
 
 // serve index.html
 app.get("/", (req, res) => {
-  res.sendFile(frontendLocation + "/index.html")
+  res.sendFile(path.join(frontendLocation, "index.html"))
 })
 
 const PORT = process.env.PORT || 3000
