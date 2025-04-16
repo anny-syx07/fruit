@@ -1,8 +1,13 @@
 import "dotenv/config"
 import express, { json } from "express"
 import path from "path"
+import { fileURLToPath } from "url"
 
 const app = express()
+
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 app.use(json())
 app.get("/api", (req, res) => {
