@@ -35,8 +35,6 @@ export class RequestMethods {
    
     if (!location) throw new CodedError("Invalid API token", 401, "REQ|01")
 
-
-
     return location
   }
 

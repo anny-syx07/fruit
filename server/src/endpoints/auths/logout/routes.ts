@@ -8,7 +8,6 @@ const logoutRouter = new Router()
 
 logoutRouter.get("/", {}, async (req, res) => {
   try {
-    const loginMethods = new LoginModel(req, res)
 
     res.removeSession()
     res.success({ success: true, message: "Logged out successfully" })

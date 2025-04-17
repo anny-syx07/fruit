@@ -40,7 +40,7 @@ app.get("/", async (req, res) => {
 
 // Use the imported routes
 app.use("/highscores", highscoresRouter.router)
-app.use("/locations", locationsRouter)
+app.use("/locations", locationsRouter.router)
 app.use("/auth", authRoutes)
 
 
