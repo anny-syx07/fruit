@@ -49,7 +49,20 @@ function preload(){
     gameOverImg = loadImage('images/game-over.png');
 }
 
-function setup(){
+async function fetchLeaderboard() {
+    try {
+        const response = await fetch('http://localhost:3000/highscores'); // Replace with your API endpoint or file path
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+    }
+}
+
+async function setup(){
     
     cnv = createCanvas(800,635);
     sword = new Sword(color("#FFFFFF"));
@@ -57,6 +70,7 @@ function setup(){
     score = 0;
     lives = 3;
 
+   await fetchLeaderboard(); // Fetch leaderboard data
 }
 
 function draw(){
@@ -133,6 +147,7 @@ function game(){
     sword.draw();
     score += points;
     drawScore();
+    drawLeaderboard(); // Show leaderboard on the game over screen
     drawLives();  
 }
 
@@ -159,6 +174,7 @@ function drawScore(){
     fill(255,147,21);
     textSize(50);
     text(score, 50, 50);
+    
 }
 
 function gameOver(){
@@ -174,6 +190,59 @@ function gameOver(){
     console.log("lost");
 }
 
+function drawLeaderboard() {
+    textAlign(LEFT);
+    noStroke();
+    fill(255,147,21);
+    textSize(30);
+    text("Leaderboard", 10, 100);
+
+    textSize(20);
+    // for (let i = 0; i < leaderboardData.length; i++) {
+    //     let entry = leaderboardData[i];
+    //     text(`${i + 1}. ${entry.name} - ${entry.score}`, width / 2, 150 + i * 30);
+    // }
+    text("1. Player1 - 100",  10, 130);
+    text("2. Player2 - 90", 10, 160);
+}
+
+
+// Show the login form
+function showLoginForm() {
+    const loginForm = document.getElementById('login-form');
+    loginForm.style.display = 'block';
+}
+
+// Handle login form submission
+document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent form from refreshing the page
+
+    const name = document.getElementById('name').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert('Login successful!');
+            console.log(data);
+            document.getElementById('login-form').style.display = 'none'; // Hide the form
+        } else {
+            alert('Login failed. Please check your credentials.');
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        alert('An error occurred. Please try again later.');
+    }
+});
+
+
+showLoginForm();
 // timer = createP("timer");
 // setInterval(timeIt, 1000);
 
