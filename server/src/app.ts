@@ -5,6 +5,11 @@ import path from "path"
 import { fileURLToPath } from "url"
 import { existsSync } from "fs"
 
+import locationsRouter from "./endpoints/locations/routes";
+import authRoutes from "./endpoints/auths/authRoutes";
+import highscoresRouter from "./endpoints/highscores/routes";
+import cookieParser from "cookie-parser";
+
 const app = express()
 
 // Define __dirname for ES modules
@@ -12,10 +17,11 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 app.use(json())
+app.use(cookieParser());
 app.get("/api", async (req, res) => {
   const location = await db.selectFrom("Locations").selectAll().executeTakeFirst()
   console.log({location})
-  res.send("Hello World!!")
+  res.send(`Hello World!! ${location?.name}`)
 })
 
 const frontendLocation = path.join(__dirname, "..", "..", "frontend")
@@ -31,6 +37,12 @@ app.use("/", express.static(frontendLocation))
 app.get("/", async (req, res) => {
   res.sendFile(path.join(frontendLocation, "index.html"))
 })
+
+// Use the imported routes
+app.use("/highscores", highscoresRouter.router)
+app.use("/locations", locationsRouter)
+app.use("/auth", authRoutes)
+
 
 const PORT = process.env.PORT || 3000
 
