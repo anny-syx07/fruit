@@ -19,7 +19,7 @@ var boom, spliced, missed, over, start // sounds
 // var counter = 60;
 // var seconds, minutes;
 // var timerValue = 60;
-var leaderboardData = [];
+var leaderboardData = []
 
 function preload() {
   // LOAD SOUNDS
@@ -55,13 +55,13 @@ function preload() {
 
 async function fetchLeaderboard() {
   try {
-    const response = await fetch("http://localhost:3000/highscores") 
+    const response = await fetch("http://localhost:3000/highscores")
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const data = await response.json()
     // updateLeaderboardUI(data)
-    leaderboardData = data;
+    leaderboardData = data
   } catch (error) {
     console.error("Error fetching leaderboard:", error)
   }
@@ -69,7 +69,7 @@ async function fetchLeaderboard() {
 
 async function fetchLocationsSession() {
   try {
-    const response = await fetch("http://localhost:3000/locations/session") 
+    const response = await fetch("http://localhost:3000/locations/session")
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -89,12 +89,11 @@ async function setup() {
   score = 0
   lives = 3
 
-  masterVolume(0);
+  masterVolume(0)
 
-  
   const showLogin = await fetchLocationsSession()
   console.log(!showLoginForm)
-  if(!showLogin) {
+  if (!showLogin) {
     console.log("Hello")
     showLoginForm()
   }
@@ -182,7 +181,7 @@ function game() {
   sword.draw()
   score += points
   drawScore()
-  drawLeaderboard() // Show leaderboard on the game over screen
+  drawLeaderboard()
   drawLives()
 }
 
@@ -220,7 +219,108 @@ function gameOver() {
   // button = createButton("Reset");
   // button.position(450, 350);
   // button.mousePressed(resetSketch);
+  // Add "Play Again" button
+
+  const topScore = leaderboardData[9]?.score
+
+  if (score > topScore) {
+    addEmailToLeaderboard()
+    console.log(leaderboardData)
+    console.log({ score })
+  } else {
+    playAgainButton()
+  }
   console.log("lost")
+}
+
+function addEmailToLeaderboard() {
+  //   // Create a card container
+  //   const card = createDiv()
+  //   card.position(600, 350) // Adjust position as needed
+  //   card.size(250, 180) // Width and height of the card
+  //   card.style("background-color", "#ffffff") // Card background color
+  //   card.style("border", "2px solid #ccc") // Border style
+  //   card.style("border-radius", "10px") // Rounded corners
+  //   card.style("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)") // Shadow effect
+  //   card.style("padding", "20px") // Inner spacing
+  //   card.style("text-align", "center") // Center align content
+
+  textAlign(CENTER)
+  const highScoreText = createP("New High Score!")
+  highScoreText.position(650, 380)
+  highScoreText.style("font-size", "24px")
+  highScoreText.style("color", "#ff5722")
+  highScoreText.style("font-weight", "bold")
+  highScoreText.style("margin", "0")
+
+  // Email Input
+  emailInput = createInput()
+  emailInput.position(620, 415)
+  // emailInput.size(200, 40); // Width, Height
+  emailInput.attribute("placeholder", "Email")
+  // Style the input
+  emailInput.style("font-size", "18px")
+  emailInput.style("padding", "8px 12px")
+  emailInput.style("border", "2px solid #ccc")
+  emailInput.style("border-radius", "5px")
+  emailInput.style("outline", "none")
+  emailInput.style("box-shadow", "0 2px 5px rgba(0,0,0,0.1)")
+
+  const submitEmailButton = createButton("Enter")
+  submitEmailButton.position(760, 465) // Centered
+  submitEmailButton.style("background-color", "#28a745")
+  submitEmailButton.style("color", "#ffffff")
+  submitEmailButton.style("font-size", "20px")
+  submitEmailButton.style("padding", "10px 20px")
+  submitEmailButton.style("border", "none")
+  submitEmailButton.style("border-radius", "5px")
+  submitEmailButton.style("cursor", "pointer")
+  submitEmailButton.mousePressed(() => {
+    submitEmailButton.remove()
+    highScoreText.remove()
+    cancelButton.remove()
+    emailInput.remove()
+    playAgainButton()
+  })
+
+  const cancelButton = createButton("Cancel")
+  cancelButton.position(640, 465) // Centered
+  cancelButton.style("background-color", "#cc0000")
+  cancelButton.style("color", "#ffffff")
+  cancelButton.style("font-size", "20px")
+  cancelButton.style("padding", "10px 20px")
+  cancelButton.style("border", "none")
+  cancelButton.style("border-radius", "5px")
+  cancelButton.style("cursor", "pointer")
+  cancelButton.mousePressed(() => {
+    cancelButton.remove()
+    submitEmailButton.remove()
+    highScoreText.remove()
+    cancelButton.remove()
+    emailInput.remove()
+    playAgainButton()
+  })
+}
+
+function playAgainButton() {
+  const playAgainButton = createButton("Play Again")
+  playAgainButton.position(660, 415, 90, 90) // Centered
+  playAgainButton.style("background-color", "#28a745")
+  playAgainButton.style("color", "#ffffff")
+  playAgainButton.style("font-size", "20px")
+  playAgainButton.style("padding", "10px 20px")
+  playAgainButton.style("border", "none")
+  playAgainButton.style("border-radius", "5px")
+  playAgainButton.style("cursor", "pointer")
+  playAgainButton.mousePressed(() => {
+    start.play()
+    score = 0
+    lives = 3
+    fruit = []
+    isPlay = true
+    loop()
+    playAgainButton.remove()
+  })
 }
 
 function drawLeaderboard() {
@@ -232,9 +332,9 @@ function drawLeaderboard() {
 
   textSize(20)
   for (let i = 0; i < leaderboardData.length; i++) {
-      let entry = leaderboardData[i];
-    const emailName = entry.email.split('@')[0];
-    text(`${i + 1}. ${emailName} - ${entry.score}`, 10, 130 + i * 30);
+    let entry = leaderboardData[i]
+    const emailName = entry.email.split("@")[0]
+    text(`${i + 1}. ${emailName} - ${entry.score}`, 10, 130 + i * 30)
   }
 }
 
@@ -246,7 +346,7 @@ function showLoginForm() {
 
 // Handle login form submission
 document.getElementById("loginForm").addEventListener("submit", async function (event) {
-  event.preventDefault() 
+  event.preventDefault()
 
   const name = document.getElementById("name").value
   const password = document.getElementById("password").value
@@ -271,7 +371,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     alert("An error occurred. Please try again later.")
   }
 })
-
 
 // timer = createP("timer");
 // setInterval(timeIt, 1000);
