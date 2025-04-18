@@ -30,6 +30,12 @@ console.log(frontendLocation)
 console.log(path.join(frontendLocation, "p5", "p5.js"))
 
 
+// Use the imported routes
+app.use("/highscores", highscoresRouter.router)
+app.use("/locations", locationsRouter.router)
+app.use("/auth", authRoutes)
+
+
 // serve files from /frontend
 app.use("/", express.static(frontendLocation))
 
@@ -37,11 +43,6 @@ app.use("/", express.static(frontendLocation))
 app.get("/", async (req, res) => {
   res.sendFile(path.join(frontendLocation, "index.html"))
 })
-
-// Use the imported routes
-app.use("/highscores", highscoresRouter.router)
-app.use("/locations", locationsRouter.router)
-app.use("/auth", authRoutes)
 
 
 const PORT = process.env.PORT || 3000

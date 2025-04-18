@@ -128,6 +128,8 @@ function draw() {
   image(this.ninjaLogo, 420, 50, 318, 165)
   image(this.newGameImg, 310, 360, 200, 200)
   image(this.fruitImg, 365, 415, 90, 90)
+  
+  drawLeaderboard(10, 250)
 
   cnv.mouseClicked(check)
   if (isPlay) {
@@ -176,6 +178,7 @@ function game() {
       if (lives < 1) {
         // Check for lives
         gameOver()
+        drawLeaderboard(10, 100)
       }
       fruit.splice(i, 1)
     } else {
@@ -183,6 +186,7 @@ function game() {
         // Check for bomb
         boom.play()
         gameOver()
+        drawLeaderboard(10, 100)
       }
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         // Sliced fruit
@@ -199,7 +203,6 @@ function game() {
   sword.draw()
   score += points
   drawScore()
-  drawLeaderboard()
   drawLives()
 }
 
@@ -358,18 +361,18 @@ function playAgainButton() {
   })
 }
 
-function drawLeaderboard() {
+function drawLeaderboard(startX, startY) {
   textAlign(LEFT)
   noStroke()
   fill(255, 147, 21)
   textSize(30)
-  text("Leaderboard", 10, 100)
+  text("Leaderboard", startX, startY)//10, 250
 
   textSize(20)
   for (let i = 0; i < leaderboardData.length; i++) {
     let entry = leaderboardData[i]
     const emailName = entry.email.split("@")[0]
-    text(`${i + 1}. ${emailName} - ${entry.score}`, 10, 130 + i * 30)
+    text(`${i + 1}. ${emailName} - ${entry.score}`, startX, (startY + 30) + i * 30)//10, 280
   }
 }
 
