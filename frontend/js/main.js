@@ -81,20 +81,20 @@ async function fetchLocationsSession() {
 }
 
 async function useAddNewHighScores({ email, score }) {
-    try {
-        const response = await fetch("http://localhost:3000/highscores", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, score }),
-        })
-        if (!response.ok) { 
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        console.log("High score submitted successfully:", result)
-        return result
-    } catch (error) {
-        console.error("Error submitting high score:", error)
+  try {
+    const response = await fetch("http://localhost:3000/highscores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, score }),
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
+    console.log("High score submitted successfully:", result)
+    return result
+  } catch (error) {
+    console.error("Error submitting high score:", error)
+  }
 }
 
 let emailInput, passwordInput, loginButton, loginMessage
@@ -107,16 +107,15 @@ async function setup() {
   lives = 3
 
   masterVolume(0)
-  
+
   await fetchLeaderboard() // Fetch leaderboard data
-  
+
   const showLogin = await fetchLocationsSession()
   console.log(!showLoginForm)
   if (!showLogin) {
     console.log("Hello")
     showLoginForm()
   }
-
 }
 
 function draw() {
@@ -128,7 +127,7 @@ function draw() {
   image(this.ninjaLogo, 420, 50, 318, 165)
   image(this.newGameImg, 310, 360, 200, 200)
   image(this.fruitImg, 365, 415, 90, 90)
-  
+
   drawLeaderboard(10, 250)
 
   cnv.mouseClicked(check)
@@ -266,10 +265,17 @@ function addNewHighScores() {
   //   card.style("padding", "20px") // Inner spacing
   //   card.style("text-align", "center") // Center align content
 
-//   fill(255);
-//   stroke(200); 
-//   strokeWeight(2);
-//   rect(200, 150, 400, 300, 10); 
+  //   fill(255);
+  //   stroke(200); 
+  //   strokeWeight(2);
+  //   rect(200, 150, 400, 300, 10); 
+
+  // noLoop()
+  // over.play()
+  // clear()
+  // background(bg)
+  // image(this.gameOverImg, 155, 260, 490, 85)
+  // lives = 0
 
   textAlign(CENTER)
   const highScoreText = createP("New High Score!")
@@ -280,9 +286,10 @@ function addNewHighScores() {
   highScoreText.style("margin", "0")
 
   // Email Input
+  // cnv.parent("sketchHolder");
   emailInput = createInput()
   emailInput.position(620, 415)
-  emailInput.size(200, 40); // Width, Height
+  emailInput.size(200, 40) // Width, Height
   emailInput.attribute("placeholder", "Email")
   // Style the input
   emailInput.style("font-size", "18px")
@@ -291,6 +298,8 @@ function addNewHighScores() {
   emailInput.style("border-radius", "5px")
   emailInput.style("outline", "none")
   emailInput.style("box-shadow", "0 2px 5px rgba(0,0,0,0.1)")
+  // emailInput.parent("sketchHolder");
+  // emailInput.position(620, 415);
 
   const submitEmailButton = createButton("Enter")
   submitEmailButton.position(760, 465) // Centered
@@ -302,19 +311,19 @@ function addNewHighScores() {
   submitEmailButton.style("border-radius", "5px")
   submitEmailButton.style("cursor", "pointer")
   submitEmailButton.mousePressed(async () => {
-    const email = emailInput.value();
+    const email = emailInput.value()
     if (email) {
-        console.log(`Email submitted: ${email}`);
-        console.log(`new highscore submitted: ${score}`)       
-        await useAddNewHighScores({ email, score })
-        await fetchLeaderboard() 
-        submitEmailButton.remove()
-        highScoreText.remove()
-        cancelButton.remove()
-        emailInput.remove()
-        playAgainButton()
+      console.log(`Email submitted: ${email}`)
+      console.log(`new highscore submitted: ${score}`)
+      await useAddNewHighScores({ email, score })
+      await fetchLeaderboard()
+      submitEmailButton.remove()
+      highScoreText.remove()
+      cancelButton.remove()
+      emailInput.remove()
+      playAgainButton()
     } else {
-        alert("Please enter a valid email.");
+      alert("Please enter a valid email.")
     }
   })
 
@@ -335,30 +344,45 @@ function addNewHighScores() {
     emailInput.remove()
     playAgainButton()
   })
-
 }
 
-
-
 function playAgainButton() {
-  const playAgainButton = createButton("Play Again")
-  playAgainButton.position(660, 415, 90, 90) // Centered
-  playAgainButton.style("background-color", "#28a745")
-  playAgainButton.style("color", "#ffffff")
-  playAgainButton.style("font-size", "20px")
-  playAgainButton.style("padding", "10px 20px")
-  playAgainButton.style("border", "none")
-  playAgainButton.style("border-radius", "5px")
-  playAgainButton.style("cursor", "pointer")
-  playAgainButton.mousePressed(() => {
-    start.play()
-    score = 0
-    lives = 3
-    fruit = []
-    isPlay = true
-    loop()
-    playAgainButton.remove()
-  })
+  // const playAgainButton = createButton("Play Again")
+  // playAgainButton.position(660, 415, 90, 90) // Centered
+  // playAgainButton.style("background-color", "#28a745")
+  // playAgainButton.style("color", "#ffffff")
+  // playAgainButton.style("font-size", "20px")
+  // playAgainButton.style("padding", "10px 20px")
+  // playAgainButton.style("border", "none")
+  // playAgainButton.style("border-radius", "5px")
+  // playAgainButton.style("cursor", "pointer")
+  // playAgainButton.mousePressed(() => {
+  //   start.play()
+  //   score = 0
+  //   lives = 3
+  //   fruit = []
+  //   isPlay = true
+  //   loop()
+  //   playAgainButton.remove()
+  // })
+
+  image(this.newGameImg, 310, 360, 200, 200);
+  image(this.fruitImg, 365, 415, 90, 90);
+
+  cnv.mouseClicked(() => {
+    if (
+      mouseX > 365 && mouseX < 365 + 90 && // X bounds of the fruit image
+      mouseY > 415 && mouseY < 415 + 90    // Y bounds of the fruit image
+    ) {
+      start.play();
+      score = 0;
+      lives = 3;
+      fruit = [];
+      isPlay = true;
+      loop();
+      playAgainButton.remove();
+    }
+  });
 }
 
 function drawLeaderboard(startX, startY) {
@@ -366,13 +390,13 @@ function drawLeaderboard(startX, startY) {
   noStroke()
   fill(255, 147, 21)
   textSize(30)
-  text("Leaderboard", startX, startY)//10, 250
+  text("Leaderboard", startX, startY) //10, 250
 
   textSize(20)
   for (let i = 0; i < leaderboardData.length; i++) {
     let entry = leaderboardData[i]
     const emailName = entry.email.split("@")[0]
-    text(`${i + 1}. ${emailName} - ${entry.score}`, startX, (startY + 30) + i * 30)//10, 280
+    text(`${i + 1}. ${emailName} - ${entry.score}`, startX, startY + 30 + i * 30) //10, 280
   }
 }
 
