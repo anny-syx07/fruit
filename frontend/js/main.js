@@ -224,7 +224,7 @@ function gameOver() {
   const topScore = leaderboardData[9]?.score
 
   if (score > topScore) {
-    addEmailToLeaderboard()
+    addNewHighScores()
     console.log(leaderboardData)
     console.log({ score })
   } else {
@@ -233,7 +233,7 @@ function gameOver() {
   console.log("lost")
 }
 
-function addEmailToLeaderboard() {
+function addNewHighScores() {
   //   // Create a card container
   //   const card = createDiv()
   //   card.position(600, 350) // Adjust position as needed
@@ -276,11 +276,19 @@ function addEmailToLeaderboard() {
   submitEmailButton.style("border-radius", "5px")
   submitEmailButton.style("cursor", "pointer")
   submitEmailButton.mousePressed(() => {
-    submitEmailButton.remove()
-    highScoreText.remove()
-    cancelButton.remove()
-    emailInput.remove()
-    playAgainButton()
+    const email = emailInput.value();
+    if (email) {
+        console.log(`Email submitted: ${email}`);
+        console.log(`new highscore submitted: ${score}`)       
+
+        submitEmailButton.remove()
+        highScoreText.remove()
+        cancelButton.remove()
+        emailInput.remove()
+        playAgainButton()
+    } else {
+        alert("Please enter a valid email.");
+    }
   })
 
   const cancelButton = createButton("Cancel")
