@@ -80,6 +80,23 @@ async function fetchLocationsSession() {
   }
 }
 
+async function useAddNewHighScores({ email, score }) {
+    try {
+        const response = await fetch("http://localhost:3000/highscores", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, score }),
+        })
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        console.log("High score submitted successfully:", result)
+        return result
+    } catch (error) {
+        console.error("Error submitting high score:", error)
+    }
+}
+
 let emailInput, passwordInput, loginButton, loginMessage
 
 async function setup() {
@@ -275,12 +292,12 @@ function addNewHighScores() {
   submitEmailButton.style("border", "none")
   submitEmailButton.style("border-radius", "5px")
   submitEmailButton.style("cursor", "pointer")
-  submitEmailButton.mousePressed(() => {
+  submitEmailButton.mousePressed(async () => {
     const email = emailInput.value();
     if (email) {
         console.log(`Email submitted: ${email}`);
         console.log(`new highscore submitted: ${score}`)       
-
+        await useAddNewHighScores({ email, score })
         submitEmailButton.remove()
         highScoreText.remove()
         cancelButton.remove()

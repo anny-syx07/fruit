@@ -18,8 +18,13 @@ try {
 
 highscoresRouter.post("/", {}, async (req, res) => {
 try {
-    const body = req.body
-    console.log(body)
+    const session = await req.getSession()
+    const {email, score} = req.body
+    const body = {
+        email,
+        score,
+        location_id: session.location_id,
+    }
     await db.insertInto("Highscores").values(body).execute()
 
     res.status(200).json({ success: true, message: "Highscore added successfully" });
