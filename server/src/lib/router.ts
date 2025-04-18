@@ -24,12 +24,12 @@ export class RequestMethods {
 
   async getSession(): Promise<Selectable<DB["Locations"]>> {
     // if (this.req.user) return this.req.user
-    const _locationID = this.req.cookies._locationID || this.req.headers["Set-Cookie"]
-    if (!_locationID) throw new CodedError("Unauthorized", 401, "REQ|01")
+    const _api_key = this.req.cookies._api_key || this.req.headers["_api_key"]
+    if (!_api_key) throw new CodedError("Unauthorized", 401, "REQ|01")
 
       const location = await db
       .selectFrom("Locations")
-      .where("location_id", "=", _locationID)
+      .where("api_key", "=", _api_key)
       .selectAll()
       .executeTakeFirst()
    
@@ -105,7 +105,7 @@ export class ResponseMethods {
     const query = await db
       .selectFrom("Locations")
       .where("location_id", "=", location.location_id)
-      .select(["name", "password", "location_id"])
+      .select(["name", "api_key", "location_id", "location_type"])
       .executeTakeFirst()
 
     const cookieOptions: CookieOptions = {
@@ -118,8 +118,9 @@ export class ResponseMethods {
       sameSite: "strict",
     }
 
+    this.res.cookie("_api_key", query?.api_key, cookieOptions)
     this.res.cookie("_name", query?.name, cookieOptions)
-    this.res.cookie("_password", query?.password, cookieOptions)
+    this.res.cookie("_locationType", query?.location_type, cookieOptions)
     this.res.cookie("_locationID", query?.location_id, cookieOptions)
   }
 
@@ -133,8 +134,9 @@ export class ResponseMethods {
       sameSite: "strict",
     }
 
+    this.res.cookie("_api_key", cookieOptions)
     this.res.cookie("_name", cookieOptions)
-    this.res.cookie("_password", cookieOptions)
+    this.res.cookie("_locationType", cookieOptions)
     this.res.cookie("_locationID", cookieOptions)
   }
 

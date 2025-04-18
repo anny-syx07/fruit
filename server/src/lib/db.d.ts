@@ -14,8 +14,10 @@ export interface Highscores {
 }
 
 export interface Locations {
+  api_key: string;
   created_at: Generated<Date | null>;
   location_id: Generated<number>;
+  location_type: "admin" | "user";
   name: string;
   password: string;
   updated_at: Generated<Date | null>;
