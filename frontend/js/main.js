@@ -87,7 +87,7 @@ async function useAddNewHighScores({ email, score }) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, score }),
         })
-        if (!response.ok) {
+        if (!response.ok) { 
             throw new Error(`HTTP error! status: ${response.status}`)
         }
         console.log("High score submitted successfully:", result)
@@ -107,7 +107,9 @@ async function setup() {
   lives = 3
 
   masterVolume(0)
-
+  
+  await fetchLeaderboard() // Fetch leaderboard data
+  
   const showLogin = await fetchLocationsSession()
   console.log(!showLoginForm)
   if (!showLogin) {
@@ -115,7 +117,6 @@ async function setup() {
     showLoginForm()
   }
 
-  await fetchLeaderboard() // Fetch leaderboard data
 }
 
 function draw() {
@@ -262,6 +263,11 @@ function addNewHighScores() {
   //   card.style("padding", "20px") // Inner spacing
   //   card.style("text-align", "center") // Center align content
 
+//   fill(255);
+//   stroke(200); 
+//   strokeWeight(2);
+//   rect(200, 150, 400, 300, 10); 
+
   textAlign(CENTER)
   const highScoreText = createP("New High Score!")
   highScoreText.position(650, 380)
@@ -273,7 +279,7 @@ function addNewHighScores() {
   // Email Input
   emailInput = createInput()
   emailInput.position(620, 415)
-  // emailInput.size(200, 40); // Width, Height
+  emailInput.size(200, 40); // Width, Height
   emailInput.attribute("placeholder", "Email")
   // Style the input
   emailInput.style("font-size", "18px")
@@ -298,6 +304,7 @@ function addNewHighScores() {
         console.log(`Email submitted: ${email}`);
         console.log(`new highscore submitted: ${score}`)       
         await useAddNewHighScores({ email, score })
+        await fetchLeaderboard() 
         submitEmailButton.remove()
         highScoreText.remove()
         cancelButton.remove()
@@ -325,7 +332,10 @@ function addNewHighScores() {
     emailInput.remove()
     playAgainButton()
   })
+
 }
+
+
 
 function playAgainButton() {
   const playAgainButton = createButton("Play Again")
