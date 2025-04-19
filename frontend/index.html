@@ -34,6 +34,17 @@
             <button type="submit" style="width: 100%; padding: 10px; background: #ff5722; color: white; border: none; border-radius: 5px;">Login</button>
         </form>
     </div>
+    <div id="high_scores" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; border-radius: 10px; color: white; display: none;">
+        <h2>New High Score!</h2>
+        <form id="highScoresForm">
+            <input type="email" id="email" name="email" required style="width: 100%; margin-bottom: 10px;" placeholder="Email"><br>
+            <div
+                style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
+                <button type="submit" style="width: 100%; padding: 10px; background: #0e0d0d; color: white; border: none; border-radius: 5px;">Cancel</button>
+                <button type="submit" style="width: 100%; padding: 10px; background: #ff5722; color: white; border: none; border-radius: 5px;">Enter</button>
+            </div>
+            </form>
+    </div>
     <!-- <div id="login-form" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 p-6 rounded-lg text-white hidden">
         <h2 class="text-2xl font-bold mb-4">Login</h2>
         <form id="loginForm" class="space-y-4">

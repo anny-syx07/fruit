@@ -277,73 +277,74 @@ function addNewHighScores() {
   // image(this.gameOverImg, 155, 260, 490, 85)
   // lives = 0
 
-  textAlign(CENTER)
-  const highScoreText = createP("New High Score!")
-  highScoreText.position(650, 380)
-  highScoreText.style("font-size", "24px")
-  highScoreText.style("color", "#ff5722")
-  highScoreText.style("font-weight", "bold")
-  highScoreText.style("margin", "0")
+  // textAlign(CENTER)
+  // const highScoreText = createP("New High Score!")
+  // highScoreText.position(650, 380)
+  // highScoreText.style("font-size", "24px")
+  // highScoreText.style("color", "#ff5722")
+  // highScoreText.style("font-weight", "bold")
+  // highScoreText.style("margin", "0")
 
-  // Email Input
-  // cnv.parent("sketchHolder");
-  emailInput = createInput()
-  emailInput.position(620, 415)
-  emailInput.size(200, 40) // Width, Height
-  emailInput.attribute("placeholder", "Email")
-  // Style the input
-  emailInput.style("font-size", "18px")
-  emailInput.style("padding", "8px 12px")
-  emailInput.style("border", "2px solid #ccc")
-  emailInput.style("border-radius", "5px")
-  emailInput.style("outline", "none")
-  emailInput.style("box-shadow", "0 2px 5px rgba(0,0,0,0.1)")
-  // emailInput.parent("sketchHolder");
-  // emailInput.position(620, 415);
+  // // Email Input
+  // emailInput = createInput()
+  // emailInput.position(620, 415)
+  // emailInput.size(200, 40) // Width, Height
+  // emailInput.attribute("placeholder", "Email")
+  // // Style the input
+  // emailInput.style("font-size", "18px")
+  // emailInput.style("padding", "8px 12px")
+  // emailInput.style("border", "2px solid #ccc")
+  // emailInput.style("border-radius", "5px")
+  // emailInput.style("outline", "none")
+  // emailInput.style("box-shadow", "0 2px 5px rgba(0,0,0,0.1)")
+  // // emailInput.parent("sketchHolder");
+  // // emailInput.position(620, 415);
 
-  const submitEmailButton = createButton("Enter")
-  submitEmailButton.position(760, 465) // Centered
-  submitEmailButton.style("background-color", "#28a745")
-  submitEmailButton.style("color", "#ffffff")
-  submitEmailButton.style("font-size", "20px")
-  submitEmailButton.style("padding", "10px 20px")
-  submitEmailButton.style("border", "none")
-  submitEmailButton.style("border-radius", "5px")
-  submitEmailButton.style("cursor", "pointer")
-  submitEmailButton.mousePressed(async () => {
-    const email = emailInput.value()
-    if (email) {
-      console.log(`Email submitted: ${email}`)
-      console.log(`new highscore submitted: ${score}`)
-      await useAddNewHighScores({ email, score })
-      await fetchLeaderboard()
-      submitEmailButton.remove()
-      highScoreText.remove()
-      cancelButton.remove()
-      emailInput.remove()
-      playAgainButton()
-    } else {
-      alert("Please enter a valid email.")
-    }
-  })
+  // const submitEmailButton = createButton("Enter")
+  // submitEmailButton.position(760, 465) // Centered
+  // submitEmailButton.style("background-color", "#28a745")
+  // submitEmailButton.style("color", "#ffffff")
+  // submitEmailButton.style("font-size", "20px")
+  // submitEmailButton.style("padding", "10px 20px")
+  // submitEmailButton.style("border", "none")
+  // submitEmailButton.style("border-radius", "5px")
+  // submitEmailButton.style("cursor", "pointer")
+  // submitEmailButton.mousePressed(async () => {
+  //   const email = emailInput.value()
+  //   if (email) {
+  //     console.log(`Email submitted: ${email}`)
+  //     console.log(`new highscore submitted: ${score}`)
+  //     await useAddNewHighScores({ email, score })
+  //     await fetchLeaderboard()
+  //     submitEmailButton.remove()
+  //     highScoreText.remove()
+  //     cancelButton.remove()
+  //     emailInput.remove()
+  //     playAgainButton()
+  //   } else {
+  //     alert("Please enter a valid email.")
+  //   }
+  // })
 
-  const cancelButton = createButton("Cancel")
-  cancelButton.position(640, 465) // Centered
-  cancelButton.style("background-color", "#cc0000")
-  cancelButton.style("color", "#ffffff")
-  cancelButton.style("font-size", "20px")
-  cancelButton.style("padding", "10px 20px")
-  cancelButton.style("border", "none")
-  cancelButton.style("border-radius", "5px")
-  cancelButton.style("cursor", "pointer")
-  cancelButton.mousePressed(() => {
-    cancelButton.remove()
-    submitEmailButton.remove()
-    highScoreText.remove()
-    cancelButton.remove()
-    emailInput.remove()
-    playAgainButton()
-  })
+  // const cancelButton = createButton("Cancel")
+  // cancelButton.position(640, 465) // Centered
+  // cancelButton.style("background-color", "#cc0000")
+  // cancelButton.style("color", "#ffffff")
+  // cancelButton.style("font-size", "20px")
+  // cancelButton.style("padding", "10px 20px")
+  // cancelButton.style("border", "none")
+  // cancelButton.style("border-radius", "5px")
+  // cancelButton.style("cursor", "pointer")
+  // cancelButton.mousePressed(() => {
+  //   cancelButton.remove()
+  //   submitEmailButton.remove()
+  //   highScoreText.remove()
+  //   cancelButton.remove()
+  //   emailInput.remove()
+  //   playAgainButton()
+  // })
+
+  showhighScoresForm()
 }
 
 function playAgainButton() {
@@ -406,6 +407,11 @@ function showLoginForm() {
   loginForm.style.display = "block"
 }
 
+function showhighScoresForm() {
+  const highscores = document.getElementById("high_scores")
+  highscores.style.display = "block"
+}
+
 // Handle login form submission
 document.getElementById("loginForm").addEventListener("submit", async function (event) {
   event.preventDefault()
@@ -428,6 +434,32 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     } else {
       alert("Login failed. Please check your credentials.")
     }
+  } catch (error) {
+    console.error("Error during login:", error)
+    alert("An error occurred. Please try again later.")
+  }
+})
+// Show the highscore form
+document.getElementById("highScoresForm").addEventListener("submit", async function (event) {
+  event.preventDefault()
+
+  const email = document.getElementById("email").value
+
+  try {
+    // const response = await fetch("http://localhost:3000/auth/login", {
+    //  method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ name, password }),
+    // }) 
+console.log(email)
+    // if (response.ok) {
+    //   const data = await response.json()
+    //   alert("Login successful!")
+    //   console.log(data)
+    //   document.getElementById("login-form").style.display = "none" // Hide the form
+    // } else {
+    //   alert("Login failed. Please check your credentials.")
+    // }
   } catch (error) {
     console.error("Error during login:", error)
     alert("An error occurred. Please try again later.")
