@@ -55,7 +55,7 @@ function preload() {
 
 async function fetchLeaderboard() {
   try {
-    const response = await fetch(`${process.env.BASE_URL}}/highscores`)
+    const response = await fetch(`http://localhost:3000/highscores`)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -69,7 +69,7 @@ async function fetchLeaderboard() {
 
 async function fetchLocationsSession() {
   try {
-    const response = await fetch(`${process.env.BASE_URL}}/locations/session`)
+    const response = await fetch(`http://localhost:3000/locations/session`)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -82,7 +82,7 @@ async function fetchLocationsSession() {
 
 async function useAddNewHighScores({ email, score }) {
   try {
-    const response = await fetch(`${process.env.BASE_URL}}/highscores`, {
+    const response = await fetch(`http://localhost:3000/highscores`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, score }),
@@ -422,7 +422,8 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   const password = document.getElementById("password").value
 
   try {
-    const response = await fetch(`${process.env.BASE_URL}}/auth/login`, {
+    // console.log(process.env.BASE_URL)
+    const response = await fetch(`http://localhost:3000/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, password }),
@@ -456,7 +457,7 @@ document.getElementById("highScoresForm").addEventListener("submit", async funct
       return
     }
 
-    const response = await fetch(`${process.env.BASE_URL}}/highscores`, {
+    const response = await fetch(`http://localhost:3000/highscores`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, score }),
