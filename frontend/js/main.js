@@ -55,7 +55,7 @@ function preload() {
 
 async function fetchLeaderboard() {
   try {
-    const response = await fetch("http://localhost:3000/highscores")
+    const response = await fetch(`${process.env.BASE_URL}}/highscores`)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -69,7 +69,7 @@ async function fetchLeaderboard() {
 
 async function fetchLocationsSession() {
   try {
-    const response = await fetch("http://localhost:3000/locations/session")
+    const response = await fetch(`${process.env.BASE_URL}}/locations/session`)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -82,7 +82,7 @@ async function fetchLocationsSession() {
 
 async function useAddNewHighScores({ email, score }) {
   try {
-    const response = await fetch("http://localhost:3000/highscores", {
+    const response = await fetch(`${process.env.BASE_URL}}/highscores`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, score }),
@@ -129,7 +129,7 @@ function draw() {
   image(this.fruitImg, 365, 415, 90, 90)
 
   drawLeaderboard(10, 250)
-
+  // showhighScoresForm()
   cnv.mouseClicked(check)
   if (isPlay) {
     game()
@@ -234,7 +234,6 @@ function gameOver() {
   over.play()
   clear()
   background(bg)
-  image(this.gameOverImg, 155, 260, 490, 85)
   lives = 0
   // button = createButton("Reset");
   // button.position(450, 350);
@@ -266,9 +265,9 @@ function addNewHighScores() {
   //   card.style("text-align", "center") // Center align content
 
   //   fill(255);
-  //   stroke(200); 
+  //   stroke(200);
   //   strokeWeight(2);
-  //   rect(200, 150, 400, 300, 10); 
+  //   rect(200, 150, 400, 300, 10);
 
   // noLoop()
   // over.play()
@@ -325,9 +324,10 @@ function addNewHighScores() {
   //     alert("Please enter a valid email.")
   //   }
   // })
-
+  // const canvasX = cnv.position().x;
+  // const canvasY = cnv.position().y;
   // const cancelButton = createButton("Cancel")
-  // cancelButton.position(640, 465) // Centered
+  // cancelButton.position(canvasX + 700, canvasY + 500) // Centered
   // cancelButton.style("background-color", "#cc0000")
   // cancelButton.style("color", "#ffffff")
   // cancelButton.style("font-size", "20px")
@@ -366,24 +366,26 @@ function playAgainButton() {
   //   loop()
   //   playAgainButton.remove()
   // })
-
-  image(this.newGameImg, 310, 360, 200, 200);
-  image(this.fruitImg, 365, 415, 90, 90);
+  image(this.gameOverImg, 155, 260, 490, 85)
+  image(this.newGameImg, 310, 360, 200, 200)
+  image(this.fruitImg, 365, 415, 90, 90)
 
   cnv.mouseClicked(() => {
     if (
-      mouseX > 365 && mouseX < 365 + 90 && // X bounds of the fruit image
-      mouseY > 415 && mouseY < 415 + 90    // Y bounds of the fruit image
+      mouseX > 365 &&
+      mouseX < 365 + 90 && // X bounds of the fruit image
+      mouseY > 415 &&
+      mouseY < 415 + 90 // Y bounds of the fruit image
     ) {
-      start.play();
-      score = 0;
-      lives = 3;
-      fruit = [];
-      isPlay = true;
-      loop();
-      playAgainButton.remove();
+      start.play()
+      score = 0
+      lives = 3
+      fruit = []
+      isPlay = true
+      loop()
+      playAgainButton.remove()
     }
-  });
+  })
 }
 
 function drawLeaderboard(startX, startY) {
@@ -420,7 +422,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   const password = document.getElementById("password").value
 
   try {
-    const response = await fetch("http://localhost:3000/auth/login", {
+    const response = await fetch(`${process.env.BASE_URL}}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, password }),
@@ -443,27 +445,40 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 document.getElementById("highScoresForm").addEventListener("submit", async function (event) {
   event.preventDefault()
 
+  const clickedButton = event.submitter
+  console.log(`Button pressed: ${clickedButton.id}`) // Log the button's id
+
   const email = document.getElementById("email").value
 
   try {
-    // const response = await fetch("http://localhost:3000/auth/login", {
-    //  method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ name, password }),
-    // }) 
-console.log(email)
-    // if (response.ok) {
-    //   const data = await response.json()
-    //   alert("Login successful!")
-    //   console.log(data)
-    //   document.getElementById("login-form").style.display = "none" // Hide the form
-    // } else {
-    //   alert("Login failed. Please check your credentials.")
-    // }
+    if (!email) {
+      alert("Please enter a valid email.")
+      return
+    }
+
+    const response = await fetch(`${process.env.BASE_URL}}/highscores`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, score }),
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    // console.log("High score submitted successfully:", result)
+    await fetchLeaderboard()
+    document.getElementById("high_scores").style.display = "none" // Hide the form
+    playAgainButton()
+    return response
   } catch (error) {
-    console.error("Error during login:", error)
-    alert("An error occurred. Please try again later.")
+    console.error("Error submitting high score:", error)
   }
+})
+
+// Separate event listener for the "Cancel" button
+document.getElementById("cancel").addEventListener("click", function () {
+  console.log("Cancel button pressed")
+  document.getElementById("high_scores").style.display = "none" // Hide the form
+  playAgainButton()
 })
 
 // timer = createP("timer");
