@@ -585,13 +585,16 @@ document.addEventListener("DOMContentLoaded", async function () {
           ? `bg-gradient-to-r from-blue-200 to-blue-400`
           : index === 2
           ? `bg-gradient-to-r from-red-200 to-red-400`
-          : `g-gradient-to-r from-orange-200 to-orange-400`
+          : `bg-gradient-to-r from-orange-200 to-orange-400`
 
       const rowContent = `
-                <div class="leaderboard-row flex items-center justify-between rounded-xl p-2 border-b border-gray-300 ${backgroundColor} opacity-${opacity}">
-                    <h1 class="rank text-center font-bold text-lg">${index + 1}</h1>
-                    <h1 class="username text-center font-medium text-lg">${player.email}</h1>
-                    <h1 class="score text-center font-bold text-lg">${player.score}</h1>
+                <div class="leaderboard-row flex items-center gap-4 rounded-xl p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
+                    <h1 class="rank border-4 border-double border-red-900 w-10 rounded-full text-center font-bold text-lg">${index + 1}</h1>
+                    <h1 class="username flex-auto text-start font-medium text-lg">${player.email}</h1>
+                    <div class="score flex items-center justify-between w-16 ${backgroundColor} rounded-full px-2 text-center font-bold text-lg">
+                    <img src="images/score.png" alt="score" class="w-5 h-5 mr-1">
+                    <span class="text-white">${player.score}</span>
+                    </div>
                 </div>
             `
       leaderboardRows.innerHTML += rowContent
