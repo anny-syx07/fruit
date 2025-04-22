@@ -19,46 +19,60 @@
     <!-- FAVICON -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
+<body class="flex pt-8 justify-center h-screen bg-cover bg-center" style="background-image: url('images/background.jpg');">
 
-    <div id="login-form" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.8); padding: 20px; border-radius: 10px; color: white; display: none;">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <label for="name">name:</label><br>
-            <input type="text" id="name" name="name" required style="width: 100%; height: 20px; margin-bottom: 10px; outline: none;"><br>
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required style="width: 100%; height: 20px; margin-bottom: 10px; outline: none;"><br>
-            <button type="submit" style="width: 100%; padding: 10px; background: #ff5722; color: white; border: none; border-radius: 5px;">Login</button>
-        </form>
-    </div>
-    <div id="high_scores" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; border-radius: 10px; color: white; display: none;">
-        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; color: #ff5722;">New High Score!</h2>
-        <form id="highScoresForm">
-            <input type="email" id="email" name="email" style="width: 100%; margin-bottom: 10px; height: 30px; outline: none;" placeholder="Email"><br>
-            <div
-                style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
-                <button id="cancel" type="button" style="width: 100%; padding: 10px; background: #0e0d0d; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
-                <button id="enter" type="submit" style="width: 100%; padding: 10px; background: #ff5722; color: white; border: none; border-radius: 5px; cursor: pointer;">Enter</button>
-            </div>
-            </form>
-    </div>
-    <!-- <div id="login-form" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 p-6 rounded-lg text-white hidden">
-        <h2 class="text-2xl font-bold mb-4">Login</h2>
+    <div id="login-form" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 p-5 rounded-lg hidden">
+        <h2 class="text-xl font-bold mb-4">Login</h2>
         <form id="loginForm" class="space-y-4">
             <div>
                 <label for="name" class="block text-sm font-medium">Name:</label>
-                <input type="text" id="name" name="name" required class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <input type="text" id="name" name="name" required class="w-full h-8 mb-2 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 ">
             </div>
             <div>
                 <label for="password" class="block text-sm font-medium">Password:</label>
-                <input type="password" id="password" name="password" required class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <input type="password" id="password" name="password" required class="w-full h-8 mb-2 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 ">
             </div>
             <button type="submit" class="w-full py-2 bg-orange-500 text-white rounded hover:bg-orange-600">Login</button>
         </form>
-    </div> -->
+    </div>
+    
+    <div id="high_scores" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg text-white hidden">
+        <h2 class="text-2xl font-bold mb-4 text-orange-500">New High Score!</h2>
+        <form id="highScoresForm" class="space-y-4">
+            <input type="email" id="email" name="email" placeholder="Email" class="w-full h-10 mb-2 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <div class="flex gap-2 mt-2">
+                <button id="cancel" type="button" class="w-full py-2 bg-gray-800 text-white rounded hover:bg-gray-900">Cancel</button>
+                <button id="enter" type="submit" class="w-full py-2 bg-orange-500 text-white rounded hover:bg-orange-600">Enter</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="leaderboard" class="absolute w-96 top-1/2.5 left-1/2.5 bg-gradient-to-b from-orange-200 to-orange-300 rounded-3xl p-6 shadow-xl hidden">
+        <!-- Close button -->
+        <button id="close-btn" class="absolute top-2.5 right-2.5 text-orange-500 hover:text-orange-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <!-- Header -->
+        <div class="relative h-16 mb-6 flex items-center justify-center">
+            <div class="absolute inset-0 bg-red-400 rounded-full transform -skew-y-1 shadow-md"></div>
+            <div class="absolute inset-0 bg-red-500 rounded-full transform skew-y-1 shadow-md"></div>
+            <h1 class="relative text-3xl text-shadow-lg font-extrabold text-white tracking-wider drop-shadow-md">LEADERBOARD</h1>
+        </div>
+
+        <!-- Leaderboard entries -->
+        <div id="leaderboard-rows" class="space-y-1">
+            <!-- Rows will be inserted here by JavaScript -->
+        </div>
+    </div>
+
 
     <!-- P5JS LIBRARY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -66,7 +80,7 @@
     <script type="text/javascript" src="p5/p5.js"></script>
     <script type="text/javascript" src="p5/addons/p5.dom.js"></script>
     <script type="text/javascript" src="p5/addons/p5.sound.js"></script>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- JS FILES -->
     <script src="./js/main.js"></script>     

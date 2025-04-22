@@ -107,7 +107,6 @@ async function setup() {
   lives = 3
 
   masterVolume(0)
-
   await fetchLeaderboard() // Fetch leaderboard data
 
   const showLogin = await fetchLocationsSession()
@@ -130,6 +129,7 @@ function draw() {
 
   drawLeaderboard(10, 250)
   // showhighScoresForm()
+  showLeaderboardScores()
   cnv.mouseClicked(check)
   if (isPlay) {
     game()
@@ -401,6 +401,10 @@ function drawLeaderboard(startX, startY) {
     const emailName = entry.email.split("@")[0]
     text(`${i + 1}. ${emailName} - ${entry.score}`, startX, startY + 30 + i * 30) //10, 280
   }
+  if (!leaderboardData || leaderboardData.length === 0) {
+    console.log("Leaderboard data is empty or not loaded.")
+    return
+  }
 }
 
 // Show the login form
@@ -442,6 +446,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     alert("An error occurred. Please try again later.")
   }
 })
+
 // Show the highscore form
 document.getElementById("highScoresForm").addEventListener("submit", async function (event) {
   event.preventDefault()
@@ -480,6 +485,120 @@ document.getElementById("cancel").addEventListener("click", function () {
   console.log("Cancel button pressed")
   document.getElementById("high_scores").style.display = "none" // Hide the form
   playAgainButton()
+})
+
+function showLeaderboardScores() {
+  const leaderboard = document.getElementById("leaderboard")
+  leaderboard.style.display = "block"
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+  // Sample leaderboard data
+  // const leaderboardData = [
+  //     { id: 1, username: "USERNAME_01", score: 42500 },
+  //     { id: 2, username: "USERNAME_02", score: 35100 },
+  //     { id: 3, username: "USERNAME_03", score: 29305 },
+  //     { id: 4, username: "USERNAME_04", score: 25280 },
+  //     { id: 5, username: "USERNAME_05", score: 18250 },
+  //     { id: 6, username: "USERNAME_06", score: 16890 },
+  //     { id: 7, username: "USERNAME_07", score: 15020 },
+  //     { id: 8, username: "USERNAME_08", score: 11000 },
+  //     { id: 9, username: "USERNAME_09", score: 10561 },
+  // ];
+  await fetchLeaderboard()
+  // Get the container and template
+  const leaderboardRows = document.getElementById("leaderboard-rows")
+  const rowTemplate = document.getElementById("row-template")
+  const closeBtn = document.getElementById("close-btn")
+  const leaderboard = document.getElementById("leaderboard")
+
+  // Populate the leaderboard
+  populateLeaderboard()
+
+  // Close button functionality
+  closeBtn.addEventListener("click", function () {
+    leaderboard.style.display = "none"
+  })
+
+  // Function to populate the leaderboard
+  function populateLeaderboard() {
+    console.log("populateLeaderboard: ", leaderboardData)
+    leaderboardData.forEach((player, index) => {
+      // Clone the template
+      // const row = rowTemplate.content.cloneNode(true);
+      // const rowElement = row.querySelector('.leaderboard-row');
+
+      // // Set background color based on rank
+      // if (player.id === 1) {
+      //     rowElement.classList.add('bg-gradient-to-r', 'from-yellow-200', 'to-yellow-400');
+      // } else if (player.id === 2) {
+      //     rowElement.classList.add('bg-gradient-to-r', 'from-blue-200', 'to-blue-400');
+      // } else if (player.id === 3) {
+      //     rowElement.classList.add('bg-gradient-to-r', 'from-red-200', 'to-red-400');
+      // } else {
+      //     // For ranks 4-9, add orange gradient with decreasing opacity
+      //     rowElement.classList.add('bg-gradient-to-r', 'from-orange-200', 'to-orange-400');
+      //     const opacity = Math.max(0.3, 1 - (player.id - 3) * 0.08);
+      //     rowElement.style.opacity = opacity;
+      // }
+
+      // // Set the rank
+      // const rankElement = row.querySelector('.rank');
+      // rankElement.textContent = player.id;
+
+      // Style rank based on position
+      // if (player.id === 1) {
+      //     rankElement.classList.add('bg-yellow-500');
+      // } else if (player.id === 2) {
+      //     rankElement.classList.add('bg-blue-500');
+      // } else if (player.id === 3) {
+      //     rankElement.classList.add('bg-red-500');
+      // } else {
+      //     // For ranks 4-9, use text instead of medal
+      //     rankElement.classList.remove('w-8', 'h-8', 'rounded-full', 'text-white', 'font-bold', 'shadow-inner', 'border-2', 'border-white');
+      //     rankElement.classList.add('text-orange-800', 'font-bold', 'text-xl');
+      // }
+
+      // Set the avatar
+      // const avatarImg = row.querySelector('.avatar-img');
+      // avatarImg.src = `https://via.placeholder.com/40?text=${player.id}`;
+      // avatarImg.alt = `${player.username} avatar`;
+
+      // // Set the username
+      // row.querySelector('.username').textContent = player.username;
+
+      // // Set the score
+      // row.querySelector('.score').textContent = player.score.toLocaleString();
+
+      // Add the row to the leaderboard
+      // const row = document.createElement('div');
+      // row.className = 'leaderboard-row flex items-center justify-between p-2 border-b border-gray-300';
+      // const rankElement = document.createElement('div');
+      // rankElement.textContent = index + 1;
+      // rankElement.className = 'rank text-center font-bold text-lg';
+      // row.appendChild(rankElement);
+      const opacity = Math.max(0.3, 1 - ((index + 1) - 3) * 0.08);
+      const backgroundColor =
+        index === 0
+          ? `bg-gradient-to-r from-yellow-200 to-yellow-400`
+          : index === 1
+          ? `bg-gradient-to-r from-blue-200 to-blue-400`
+          : index === 2
+          ? `bg-gradient-to-r from-red-200 to-red-400`
+          : `g-gradient-to-r from-orange-200 to-orange-400`
+
+      const rowContent = `
+                <div class="leaderboard-row flex items-center justify-between rounded-xl p-2 border-b border-gray-300 ${backgroundColor} opacity-${opacity}">
+                    <h1 class="rank text-center font-bold text-lg">${index + 1}</h1>
+                    <h1 class="username text-center font-medium text-lg">${player.email}</h1>
+                    <h1 class="score text-center font-bold text-lg">${player.score}</h1>
+                </div>
+            `
+      leaderboardRows.innerHTML += rowContent
+
+      // leaderboardRows.appendChild(row);
+    })
+  }
 })
 
 // timer = createP("timer");
