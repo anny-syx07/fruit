@@ -23,18 +23,23 @@
         <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="flex pt-8 justify-center h-screen bg-cover bg-center" style="background-image: url('images/background.jpg');">
-
-    <div id="login-form" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 p-5 rounded-lg hidden">
-        <h2 class="text-xl font-bold mb-4">Login</h2>
+<body class="flex flex-col pt-8 items-center justify-start min-h-screen bg-cover bg-center" style="background-image: url('images/background.jpg');"></body>
+    <div id="gameCanvas" class="w-[800px] h-[635px]"></div>
+    
+    <div id="login-form" class="absolute top-1/2 left-1/2 bg-gradient-to-b from-orange-200 to-orange-400 bg-black bg-opacity-80 p-5 rounded-lg hidden">
+        <div class="relative h-12 mb-4 flex items-center justify-center">
+            <div class="absolute inset-0 bg-red-400 rounded-full transform -skew-y-1 shadow-md"></div>
+            <div class="absolute inset-0 bg-red-500 rounded-full transform skew-y-1 shadow-md"></div>
+            <h1 class="relative text-3xl text-shadow-lg font-extrabold text-white tracking-wider drop-shadow-md">Login</h1>
+        </div>
         <form id="loginForm" class="space-y-4">
             <div>
                 <label for="name" class="block text-sm font-medium">Name:</label>
-                <input type="text" id="name" name="name" required class="w-full h-8 mb-2 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 ">
+                <input type="text" id="name" name="name" required class="w-full h-8 mb-2 p-2 rounded border border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-gradient-to-r from-orange-200 to-orange-300">
             </div>
             <div>
                 <label for="password" class="block text-sm font-medium">Password:</label>
-                <input type="password" id="password" name="password" required class="w-full h-8 mb-2 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 ">
+                <input type="password" id="password" name="password" required class="w-full h-8 mb-2 p-2 rounded border border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-gradient-to-r from-orange-200 to-orange-300">
             </div>
             <button type="submit" class="w-full py-2 bg-orange-500 text-white rounded hover:bg-orange-600">Login</button>
         </form>
@@ -51,28 +56,31 @@
         </form>
     </div>
 
-    <div id="leaderboard" class="absolute w-96 top-1/2.5 left-1/2.5 bg-gradient-to-b from-orange-200 to-orange-300 rounded-3xl p-6 shadow-xl hidden">
-        <!-- Close button -->
-        <button id="close-btn" class="absolute top-2.5 right-2.5 text-orange-500 hover:text-orange-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        </button>
-
+    <div id="leaderboard" class="absolute w-96 top-1/2.5 left-1/2.5 bg-gradient-to-b from-orange-200 to-orange-300 rounded-3xl p-3 shadow-xl hidden">
         <!-- Header -->
-        <div class="relative h-16 mb-6 flex items-center justify-center">
+        <div class="relative h-12 mb-4 mt-3 mx-3 flex items-center justify-center">
             <div class="absolute inset-0 bg-red-400 rounded-full transform -skew-y-1 shadow-md"></div>
             <div class="absolute inset-0 bg-red-500 rounded-full transform skew-y-1 shadow-md"></div>
             <h1 class="relative text-3xl text-shadow-lg font-extrabold text-white tracking-wider drop-shadow-md">LEADERBOARD</h1>
         </div>
 
         <!-- Leaderboard entries -->
-        <div id="leaderboard-rows" class="space-y-1">
+        <div id="leaderboard-rows" class="space-y-1 bg-gradient-to-b from-orange-400 to-orange-600 rounded-3xl p-3">
             <!-- Rows will be inserted here by JavaScript -->
         </div>
     </div>
 
+    
+    <div id="gameMenu" class="relative w-[800px] h-[635px] mt-5 hidden">
+        <div class="flex justify-center items-center gap-4">
+            <img src="images/fruit.png" alt="newgame" class="w-[358px] h-[195px]">
+            <img src="images/ninja.png" alt="fruit" class="w-[318px] h-[165px] mt-5">
+        </div>
+        <div id="playGame">
+            <img src="images/new-game.png" alt="newgame" class="absolute w-[200px] h-[200px] top-[250px] left-1/2 transform -translate-x-1/2 z-10">
+            <img src="images/fruitMode.png" alt="fruit" class="absolute w-[90px] h-[90px] top-[305px] left-1/2 transform -translate-x-1/2 z-10">
+        </div>
+    </div>
 
     <!-- P5JS LIBRARY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

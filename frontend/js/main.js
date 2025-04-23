@@ -21,6 +21,9 @@ var boom, spliced, missed, over, start // sounds
 // var timerValue = 60;
 var leaderboardData = []
 
+const playGameButton = document.getElementById("playGame")
+const gameMenu = document.getElementById("gameMenu")
+
 function preload() {
   // LOAD SOUNDS
   boom = loadSound("sounds/boom.mp3")
@@ -51,6 +54,7 @@ function preload() {
   newGameImg = loadImage("images/new-game.png")
   fruitImg = loadImage("images/fruitMode.png")
   gameOverImg = loadImage("images/game-over.png")
+  leaderboardImg = loadImage("images/leaderboards.png")
 }
 
 async function fetchLeaderboard() {
@@ -101,6 +105,7 @@ let emailInput, passwordInput, loginButton, loginMessage
 
 async function setup() {
   cnv = createCanvas(800, 635)
+  cnv.parent("gameCanvas")
   sword = new Sword(color("#FFFFFF"))
   frameRate(60)
   score = 0
@@ -122,14 +127,15 @@ function draw() {
   background(bg)
 
   image(this.foregroundImg, 0, 0, 800, 350)
-  image(this.fruitLogo, 40, 20, 358, 195)
-  image(this.ninjaLogo, 420, 50, 318, 165)
-  image(this.newGameImg, 310, 360, 200, 200)
-  image(this.fruitImg, 365, 415, 90, 90)
+  // image(this.fruitLogo, 40, 20, 358, 195)
+  // image(this.ninjaLogo, 420, 50, 318, 165)
+  // image(this.newGameImg, 310, 360, 200, 200)
+  // image(this.fruitImg, 365, 415, 90, 90)
 
-  drawLeaderboard(10, 250)
+  drawLeaderboard()
   // showhighScoresForm()
-  showLeaderboardScores()
+  // showLeaderboardScores()
+  gameMenu.style.display = "block"
   cnv.mouseClicked(check)
   if (isPlay) {
     game()
@@ -153,6 +159,8 @@ function check() {
 function game() {
   clear()
   background(bg)
+  gameMenu.style.display = "none"
+  document.getElementById("leaderboard").style.display = "none"
   if (mouseIsPressed) {
     // Draw sword
     sword.swipe(mouseX, mouseY)
@@ -177,7 +185,6 @@ function game() {
       if (lives < 1) {
         // Check for lives
         gameOver()
-        drawLeaderboard(10, 100)
       }
       fruit.splice(i, 1)
     } else {
@@ -185,7 +192,6 @@ function game() {
         // Check for bomb
         boom.play()
         gameOver()
-        drawLeaderboard(10, 100)
       }
       if (sword.checkSlice(fruit[i]) && fruit[i].name != "boom") {
         // Sliced fruit
@@ -239,13 +245,11 @@ function gameOver() {
   // button.position(450, 350);
   // button.mousePressed(resetSketch);
   // Add "Play Again" button
-
+  
   const topScore = leaderboardData[9]?.score
-
+  
   if (score > topScore) {
     addNewHighScores()
-    console.log(leaderboardData)
-    console.log({ score })
   } else {
     playAgainButton()
   }
@@ -348,63 +352,31 @@ function addNewHighScores() {
 }
 
 function playAgainButton() {
-  // const playAgainButton = createButton("Play Again")
-  // playAgainButton.position(660, 415, 90, 90) // Centered
-  // playAgainButton.style("background-color", "#28a745")
-  // playAgainButton.style("color", "#ffffff")
-  // playAgainButton.style("font-size", "20px")
-  // playAgainButton.style("padding", "10px 20px")
-  // playAgainButton.style("border", "none")
-  // playAgainButton.style("border-radius", "5px")
-  // playAgainButton.style("cursor", "pointer")
-  // playAgainButton.mousePressed(() => {
-  //   start.play()
-  //   score = 0
-  //   lives = 3
-  //   fruit = []
-  //   isPlay = true
-  //   loop()
-  //   playAgainButton.remove()
-  // })
-  image(this.gameOverImg, 155, 260, 490, 85)
-  image(this.newGameImg, 310, 360, 200, 200)
-  image(this.fruitImg, 365, 415, 90, 90)
+  drawLeaderboard()
+  gameMenu.style.display = "block"
+  // image(this.gameOverImg, 155, 260, 490, 85)
+  // image(this.newGameImg, 310, 360, 200, 200)
+  // image(this.fruitImg, 365, 415, 90, 90)
 
-  cnv.mouseClicked(() => {
-    if (
-      mouseX > 365 &&
-      mouseX < 365 + 90 && // X bounds of the fruit image
-      mouseY > 415 &&
-      mouseY < 415 + 90 // Y bounds of the fruit image
-    ) {
-      start.play()
-      score = 0
-      lives = 3
-      fruit = []
-      isPlay = true
-      loop()
-      playAgainButton.remove()
-    }
-  })
+  // cnv.mouseClicked(() => {
+  //   if (
+  //     mouseX > 365 &&
+  //     mouseX < 365 + 90 && // X bounds of the fruit image
+  //     mouseY > 415 &&
+  //     mouseY < 415 + 90 // Y bounds of the fruit image
+  //   ) {
+  //     start.play()
+  //     score = 0
+  //     lives = 3
+  //     fruit = []
+  //     isPlay = true
+  //     loop()
+  //   }
+  // })
 }
 
-function drawLeaderboard(startX, startY) {
-  textAlign(LEFT)
-  noStroke()
-  fill(255, 147, 21)
-  textSize(30)
-  text("Leaderboard", startX, startY) //10, 250
-
-  textSize(20)
-  for (let i = 0; i < leaderboardData.length; i++) {
-    let entry = leaderboardData[i]
-    const emailName = entry.email.split("@")[0]
-    text(`${i + 1}. ${emailName} - ${entry.score}`, startX, startY + 30 + i * 30) //10, 280
-  }
-  if (!leaderboardData || leaderboardData.length === 0) {
-    console.log("Leaderboard data is empty or not loaded.")
-    return
-  }
+function drawLeaderboard() {
+  showLeaderboardScores()
 }
 
 // Show the login form
@@ -487,38 +459,30 @@ document.getElementById("cancel").addEventListener("click", function () {
   playAgainButton()
 })
 
+document.getElementById("playGame").addEventListener("click", function () {
+  console.log("play button pressed")
+  start.play()
+  score = 0
+  lives = 3
+  fruit = []
+  isPlay = true
+  loop()
+})
+
 function showLeaderboardScores() {
   const leaderboard = document.getElementById("leaderboard")
   leaderboard.style.display = "block"
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  // Sample leaderboard data
-  // const leaderboardData = [
-  //     { id: 1, username: "USERNAME_01", score: 42500 },
-  //     { id: 2, username: "USERNAME_02", score: 35100 },
-  //     { id: 3, username: "USERNAME_03", score: 29305 },
-  //     { id: 4, username: "USERNAME_04", score: 25280 },
-  //     { id: 5, username: "USERNAME_05", score: 18250 },
-  //     { id: 6, username: "USERNAME_06", score: 16890 },
-  //     { id: 7, username: "USERNAME_07", score: 15020 },
-  //     { id: 8, username: "USERNAME_08", score: 11000 },
-  //     { id: 9, username: "USERNAME_09", score: 10561 },
-  // ];
   await fetchLeaderboard()
   // Get the container and template
   const leaderboardRows = document.getElementById("leaderboard-rows")
   const rowTemplate = document.getElementById("row-template")
-  const closeBtn = document.getElementById("close-btn")
   const leaderboard = document.getElementById("leaderboard")
 
   // Populate the leaderboard
   populateLeaderboard()
-
-  // Close button functionality
-  closeBtn.addEventListener("click", function () {
-    leaderboard.style.display = "none"
-  })
 
   // Function to populate the leaderboard
   function populateLeaderboard() {
@@ -577,7 +541,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       // rankElement.textContent = index + 1;
       // rankElement.className = 'rank text-center font-bold text-lg';
       // row.appendChild(rankElement);
-      const opacity = Math.max(0.3, 1 - ((index + 1) - 3) * 0.08);
+      const opacity = Math.max(0.3, 1 - (index + 1 - 3) * 0.08)
       const backgroundColor =
         index === 0
           ? `bg-gradient-to-r from-yellow-200 to-yellow-400`
