@@ -112,12 +112,10 @@ async function setup() {
   lives = 3
 
   masterVolume(0)
-  await fetchLeaderboard() // Fetch leaderboard data
+  await fetchLeaderboard()
 
   const showLogin = await fetchLocationsSession()
-  console.log(!showLoginForm)
   if (!showLogin) {
-    console.log("Hello")
     showLoginForm()
   }
 }
@@ -408,6 +406,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     if (response.ok) {
       const data = await response.json()
       alert("Login successful!")
+      await fetchLeaderboard()
       console.log(data)
       document.getElementById("login-form").style.display = "none" // Hide the form
     } else {
