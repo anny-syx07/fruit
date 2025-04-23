@@ -407,6 +407,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       const data = await response.json()
       alert("Login successful!")
       await fetchLeaderboard()
+      populateLeaderboard()
       console.log(data)
       document.getElementById("login-form").style.display = "none" // Hide the form
     } else {
@@ -473,99 +474,42 @@ function showLeaderboardScores() {
   leaderboard.style.display = "block"
 }
 
+// Move populateLeaderboard outside the event listener
+function populateLeaderboard() {
+  const leaderboardRows = document.getElementById("leaderboard-rows");
+  leaderboardRows.innerHTML = ""; // Clear existing rows
+  console.log("populateLeaderboard: ", leaderboardData);
+
+  leaderboardData.forEach((player, index) => {
+    const opacity = Math.max(0.3, 1 - (index + 1 - 3) * 0.08);
+    const backgroundColor =
+      index === 0
+        ? `bg-gradient-to-r from-yellow-200 to-yellow-400`
+        : index === 1
+        ? `bg-gradient-to-r from-blue-200 to-blue-400`
+        : index === 2
+        ? `bg-gradient-to-r from-red-200 to-red-400`
+        : `bg-gradient-to-r from-orange-200 to-orange-400`;
+
+    const rowContent = `
+      <div class="leaderboard-row flex items-center gap-4 rounded-xl p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
+          <h1 class="rank border-4 border-double border-red-900 w-10 rounded-full text-center font-bold text-lg">${index + 1}</h1>
+          <h1 class="username flex-auto text-start font-medium text-lg">${player.email}</h1>
+          <div class="score flex items-center justify-between w-16 ${backgroundColor} rounded-full px-2 text-center font-bold text-lg">
+          <img src="images/score.png" alt="score" class="w-5 h-5 mr-1">
+          <span class="text-white">${player.score}</span>
+          </div>
+      </div>
+    `;
+    leaderboardRows.innerHTML += rowContent;
+  });
+}
+
+// Keep the DOMContentLoaded event listener for initial population
 document.addEventListener("DOMContentLoaded", async function () {
-  await fetchLeaderboard()
-  // Get the container and template
-  const leaderboardRows = document.getElementById("leaderboard-rows")
-  const rowTemplate = document.getElementById("row-template")
-  const leaderboard = document.getElementById("leaderboard")
-
-  // Populate the leaderboard
-  populateLeaderboard()
-
-  // Function to populate the leaderboard
-  function populateLeaderboard() {
-    console.log("populateLeaderboard: ", leaderboardData)
-    leaderboardData.forEach((player, index) => {
-      // Clone the template
-      // const row = rowTemplate.content.cloneNode(true);
-      // const rowElement = row.querySelector('.leaderboard-row');
-
-      // // Set background color based on rank
-      // if (player.id === 1) {
-      //     rowElement.classList.add('bg-gradient-to-r', 'from-yellow-200', 'to-yellow-400');
-      // } else if (player.id === 2) {
-      //     rowElement.classList.add('bg-gradient-to-r', 'from-blue-200', 'to-blue-400');
-      // } else if (player.id === 3) {
-      //     rowElement.classList.add('bg-gradient-to-r', 'from-red-200', 'to-red-400');
-      // } else {
-      //     // For ranks 4-9, add orange gradient with decreasing opacity
-      //     rowElement.classList.add('bg-gradient-to-r', 'from-orange-200', 'to-orange-400');
-      //     const opacity = Math.max(0.3, 1 - (player.id - 3) * 0.08);
-      //     rowElement.style.opacity = opacity;
-      // }
-
-      // // Set the rank
-      // const rankElement = row.querySelector('.rank');
-      // rankElement.textContent = player.id;
-
-      // Style rank based on position
-      // if (player.id === 1) {
-      //     rankElement.classList.add('bg-yellow-500');
-      // } else if (player.id === 2) {
-      //     rankElement.classList.add('bg-blue-500');
-      // } else if (player.id === 3) {
-      //     rankElement.classList.add('bg-red-500');
-      // } else {
-      //     // For ranks 4-9, use text instead of medal
-      //     rankElement.classList.remove('w-8', 'h-8', 'rounded-full', 'text-white', 'font-bold', 'shadow-inner', 'border-2', 'border-white');
-      //     rankElement.classList.add('text-orange-800', 'font-bold', 'text-xl');
-      // }
-
-      // Set the avatar
-      // const avatarImg = row.querySelector('.avatar-img');
-      // avatarImg.src = `https://via.placeholder.com/40?text=${player.id}`;
-      // avatarImg.alt = `${player.username} avatar`;
-
-      // // Set the username
-      // row.querySelector('.username').textContent = player.username;
-
-      // // Set the score
-      // row.querySelector('.score').textContent = player.score.toLocaleString();
-
-      // Add the row to the leaderboard
-      // const row = document.createElement('div');
-      // row.className = 'leaderboard-row flex items-center justify-between p-2 border-b border-gray-300';
-      // const rankElement = document.createElement('div');
-      // rankElement.textContent = index + 1;
-      // rankElement.className = 'rank text-center font-bold text-lg';
-      // row.appendChild(rankElement);
-      const opacity = Math.max(0.3, 1 - (index + 1 - 3) * 0.08)
-      const backgroundColor =
-        index === 0
-          ? `bg-gradient-to-r from-yellow-200 to-yellow-400`
-          : index === 1
-          ? `bg-gradient-to-r from-blue-200 to-blue-400`
-          : index === 2
-          ? `bg-gradient-to-r from-red-200 to-red-400`
-          : `bg-gradient-to-r from-orange-200 to-orange-400`
-
-      const rowContent = `
-                <div class="leaderboard-row flex items-center gap-4 rounded-xl p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
-                    <h1 class="rank border-4 border-double border-red-900 w-10 rounded-full text-center font-bold text-lg">${index + 1}</h1>
-                    <h1 class="username flex-auto text-start font-medium text-lg">${player.email}</h1>
-                    <div class="score flex items-center justify-between w-16 ${backgroundColor} rounded-full px-2 text-center font-bold text-lg">
-                    <img src="images/score.png" alt="score" class="w-5 h-5 mr-1">
-                    <span class="text-white">${player.score}</span>
-                    </div>
-                </div>
-            `
-      leaderboardRows.innerHTML += rowContent
-
-      // leaderboardRows.appendChild(row);
-    })
-  }
-})
+  await fetchLeaderboard();
+  populateLeaderboard(); // Populate leaderboard on page load
+});
 
 // timer = createP("timer");
 // setInterval(timeIt, 1000);
