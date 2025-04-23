@@ -23,6 +23,7 @@ var leaderboardData = []
 
 const playGameButton = document.getElementById("playGame")
 const gameMenu = document.getElementById("gameMenu")
+const logoutButtonBody = document.getElementById("logout")
 
 function preload() {
   // LOAD SOUNDS
@@ -55,6 +56,20 @@ function preload() {
   fruitImg = loadImage("images/fruitMode.png")
   gameOverImg = loadImage("images/game-over.png")
   leaderboardImg = loadImage("images/leaderboards.png")
+}
+
+async function fetchLeaderboard() {
+  try {
+    const response = await fetch(`http://localhost:3000/highscores`)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    const data = await response.json()
+    // updateLeaderboardUI(data)
+    leaderboardData = data
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error)
+  }
 }
 
 async function fetchLeaderboard() {
@@ -134,6 +149,7 @@ function draw() {
   // showhighScoresForm()
   // showLeaderboardScores()
   gameMenu.style.display = "block"
+  logoutButtonBody.style.display = "block"
   cnv.mouseClicked(check)
   if (isPlay) {
     game()
@@ -158,6 +174,7 @@ function game() {
   clear()
   background(bg)
   gameMenu.style.display = "none"
+  logoutButtonBody.style.display = "none"
   document.getElementById("leaderboard").style.display = "none"
   if (mouseIsPressed) {
     // Draw sword
@@ -352,6 +369,8 @@ function addNewHighScores() {
 function playAgainButton() {
   drawLeaderboard()
   gameMenu.style.display = "block"
+  logoutButtonBody.style.display = "block"
+  document.getElementById("logout-button").style.display = "block"
   // image(this.gameOverImg, 155, 260, 490, 85)
   // image(this.newGameImg, 310, 360, 200, 200)
   // image(this.fruitImg, 365, 415, 90, 90)
@@ -418,6 +437,28 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     alert("An error occurred. Please try again later.")
   }
 })
+
+
+// Handle logout button click
+document.getElementById("logout-button").addEventListener("click", async function (event) {
+  event.preventDefault();
+
+  try {
+    const response = await fetch(`http://localhost:3000/auth/logout`);
+
+    if (response.ok) {
+      alert("Logout successful!");
+      document.getElementById("login-form").style.display = "block";
+      document.getElementById("leaderboard").style.display = "none";
+    } else {
+      alert("Logout failed. Please try again.");
+    }
+  } catch (error) {
+    console.error("Error during logout:", error);
+    alert("An error occurred. Please try again later.");
+  }
+});
+
 
 // Show the highscore form
 document.getElementById("highScoresForm").addEventListener("submit", async function (event) {
@@ -492,10 +533,10 @@ function populateLeaderboard() {
         : `bg-gradient-to-r from-orange-200 to-orange-400`;
 
     const rowContent = `
-      <div class="leaderboard-row flex items-center gap-4 rounded-xl p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
-          <h1 class="rank border-4 border-double border-red-900 w-10 rounded-full text-center font-bold text-lg">${index + 1}</h1>
-          <h1 class="username flex-auto text-start font-medium text-lg">${player.email}</h1>
-          <div class="score flex items-center justify-between w-16 ${backgroundColor} rounded-full px-2 text-center font-bold text-lg">
+      <div class="leaderboard-row flex items-center gap-4 rounded-xl text-sm p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
+          <h1 class="rank flex justify-center items-center border-2 border-double border-red-900 w-6 rounded-full text-center font-bold">${index + 1}</h1>
+          <h1 class="username flex-auto text-start font-medium">${player.email}</h1>
+          <div class="score flex items-center justify-between w-16 ${backgroundColor} rounded-full px-2 text-center font-bold">
           <img src="images/score.png" alt="score" class="w-5 h-5 mr-1">
           <span class="text-white">${player.score}</span>
           </div>
