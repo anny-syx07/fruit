@@ -506,3 +506,13 @@ setInterval(() => {
     timerValue--
   }
 }, 1000)
+
+// Prevent touchmove from scrolling the page
+document.body.addEventListener('touchmove', function (e) {
+  e.preventDefault();
+}, { passive: false });
+
+// Optionally also prevent mouse drag behavior
+document.body.addEventListener('mousedown', function (e) {
+  e.preventDefault();
+});
