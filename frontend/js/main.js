@@ -18,10 +18,10 @@ var boom, spliced, missed, over, start // sounds
 // var timer;
 // var counter = 60;
 // var seconds, minutes;
-var timerValue = 10;
+var timerValue = 60
 var leaderboardData = []
 
-const playGameContainer = document.getElementById("playGameContainer");
+const playGameContainer = document.getElementById("playGameContainer")
 const gameMenu = document.getElementById("gameMenu")
 const logoutButtonBody = document.getElementById("logout")
 
@@ -132,9 +132,9 @@ async function setup() {
   const showLogin = await fetchLocationsSession()
   if (!showLogin) {
     showLoginForm()
-  }else {
-  drawLeaderboard()
-  logoutButtonBody.style.display = "block"
+  } else {
+    drawLeaderboard()
+    logoutButtonBody.style.display = "block"
   }
 }
 
@@ -152,7 +152,7 @@ function draw() {
   if (isPlay) {
     game()
   }
-  
+
   //     if (timerValue >= 60) {
   //         text("0:" + timerValue, width / 2, height / 2);
   //     }
@@ -179,12 +179,25 @@ function game() {
     // Draw sword
     sword.swipe(mouseX, mouseY)
   }
+
   if (frameCount % 5 === 0) {
     if (noise(frameCount) > 0.69) {
       fruit.push(randomFruit()) // Display new fruit
     }
+    if (timerValue < 30) {
+        if (noise(frameCount) > 0.69) {
+          fruit.push(randomFruit())
+      }
+    }
+    if (timerValue < 20) {
+        if (noise(frameCount) > 0.69) {
+          fruit.push(randomFruit()) 
+      }
+    }
   }
+
   points = 0
+
   for (var i = fruit.length - 1; i >= 0; i--) {
     fruit[i].update()
     fruit[i].draw()
@@ -221,12 +234,12 @@ function game() {
   }
 
   if (timerValue <= 0) {
-    gameOver();
+    gameOver()
   }
   sword.draw()
   score += points
   drawScore()
-  drawTimer() 
+  drawTimer()
   drawLives()
 }
 
@@ -245,6 +258,11 @@ function drawLives() {
   }
 }
 
+
+function mouseReleased() {
+console.log("mouseReleased")
+}
+
 function drawScore() {
   image(this.scoreImg, 10, 10, 40, 40)
   textAlign(LEFT)
@@ -261,9 +279,8 @@ function gameOver() {
   background(bg)
   lives = 0
 
-  
   const topScore = leaderboardData[9]?.score
-  
+
   if (score > topScore) {
     addNewHighScores()
   } else {
@@ -295,7 +312,7 @@ function playAgainButton() {
       start.play()
       score = 0
       lives = 3
-      timerValue = 10;
+      timerValue = 60
       fruit = []
       isPlay = true
       loop()
@@ -349,28 +366,26 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   }
 })
 
-
 // Handle logout button click
 document.getElementById("logout-button").addEventListener("click", async function (event) {
-  event.preventDefault();
+  event.preventDefault()
 
   try {
-    const response = await fetch(`http://localhost:3000/auth/logout`);
+    const response = await fetch(`http://localhost:3000/auth/logout`)
 
     if (response.ok) {
-      alert("Logout successful!");
-      document.getElementById("login-form").style.display = "block";
-      document.getElementById("leaderboard").style.display = "none";
-      document.getElementById("logout").style.display = "none";
+      alert("Logout successful!")
+      document.getElementById("login-form").style.display = "block"
+      document.getElementById("leaderboard").style.display = "none"
+      document.getElementById("logout").style.display = "none"
     } else {
-      alert("Logout failed. Please try again.");
+      alert("Logout failed. Please try again.")
     }
   } catch (error) {
-    console.error("Error during logout:", error);
-    alert("An error occurred. Please try again later.");
+    console.error("Error during logout:", error)
+    alert("An error occurred. Please try again later.")
   }
-});
-
+})
 
 // Show the highscore form
 document.getElementById("highScoresForm").addEventListener("submit", async function (event) {
@@ -415,17 +430,17 @@ document.getElementById("cancel").addEventListener("click", function () {
 playGameContainer.addEventListener("click", function (event) {
   // Check if the clicked element has the "playGame" class
   if (event.target.classList.contains("playGame")) {
-    console.log("Image clicked:", event.target.alt); // Log the clicked image's alt text
-    start.play();
-    score = 0;
-    lives = 3;
-    fruit = [];
-    isPlay = true;
-    loop();
+    console.log("Image clicked:", event.target.alt) // Log the clicked image's alt text
+    start.play()
+    score = 0
+    lives = 3
+    fruit = []
+    isPlay = true
+    loop()
   } else {
-    console.log("Clicked outside the images");
+    console.log("Clicked outside the images")
   }
-});
+})
 
 function drawLeaderboard() {
   const leaderboard = document.getElementById("leaderboard")
@@ -440,12 +455,12 @@ function logout() {
 
 // Move populateLeaderboard outside the event listener
 function populateLeaderboard() {
-  const leaderboardRows = document.getElementById("leaderboard-rows");
-  leaderboardRows.innerHTML = ""; // Clear existing rows
-  console.log("populateLeaderboard: ", leaderboardData);
+  const leaderboardRows = document.getElementById("leaderboard-rows")
+  leaderboardRows.innerHTML = "" // Clear existing rows
+  console.log("populateLeaderboard: ", leaderboardData)
 
   leaderboardData.forEach((player, index) => {
-    const opacity = Math.max(0.3, 1 - (index + 1 - 3) * 0.08);
+    const opacity = Math.max(0.3, 1 - (index + 1 - 3) * 0.08)
     const backgroundColor =
       index === 0
         ? `bg-gradient-to-r from-yellow-200 to-yellow-400`
@@ -453,41 +468,41 @@ function populateLeaderboard() {
         ? `bg-gradient-to-r from-blue-200 to-blue-400`
         : index === 2
         ? `bg-gradient-to-r from-red-200 to-red-400`
-        : `bg-gradient-to-r from-orange-200 to-orange-400`;
+        : `bg-gradient-to-r from-orange-200 to-orange-400`
 
     const rowContent = `
       <div class="leaderboard-row flex items-center gap-4 rounded-xl text-sm p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
-          <h1 class="rank flex justify-center items-center border-2 border-double border-red-900 w-6 rounded-full text-center font-bold">${index + 1}</h1>
+          <h1 class="rank flex justify-center items-center border-2 border-double border-red-900 w-6 rounded-full text-center font-bold">${
+            index + 1
+          }</h1>
           <h1 class="username flex-auto text-start font-medium">${player.email}</h1>
           <div class="score flex items-center justify-between w-16 ${backgroundColor} rounded-full px-2 text-center font-bold">
           <img src="images/score.png" alt="score" class="w-5 h-5 mr-1">
           <span class="text-white">${player.score}</span>
           </div>
       </div>
-    `;
-    leaderboardRows.innerHTML += rowContent;
-  });
+    `
+    leaderboardRows.innerHTML += rowContent
+  })
 }
 
 // Keep the DOMContentLoaded event listener for initial population
 document.addEventListener("DOMContentLoaded", async function () {
-  await fetchLeaderboard();
-  populateLeaderboard(); // Populate leaderboard on page load
-});
+  await fetchLeaderboard()
+  populateLeaderboard() // Populate leaderboard on page load
+})
 
 // Function to draw the timer on the screen
 function drawTimer() {
-  textAlign(CENTER);
-  noStroke();
-  fill(255, 147, 21);
-  textSize(50);
-  text(`Time: ${timerValue}`, width / 2, 50);
+  textAlign(CENTER)
+  noStroke()
+  fill(255, 147, 21)
+  textSize(50)
+  text(`Time: ${timerValue}`, width / 2, 50)
 }
 // Decrement the timer every second
 setInterval(() => {
   if (isPlay && timerValue > 0) {
-    timerValue--;
+    timerValue--
   }
-}, 1000);
-
-
+}, 1000)
