@@ -18,7 +18,7 @@ var boom, spliced, missed, over, start // sounds
 // var timer;
 // var counter = 60;
 // var seconds, minutes;
-// var timerValue = 60;
+var timerValue = 10;
 var leaderboardData = []
 
 const playGameContainer = document.getElementById("playGameContainer");
@@ -143,18 +143,16 @@ function draw() {
   background(bg)
 
   image(this.foregroundImg, 0, 0, 800, 350)
-  // image(this.fruitLogo, 40, 20, 358, 195)
-  // image(this.ninjaLogo, 420, 50, 318, 165)
-  // image(this.newGameImg, 310, 360, 200, 200)
-  // image(this.fruitImg, 365, 415, 90, 90)
+  image(this.fruitLogo, 40, 20, 358, 195)
+  image(this.ninjaLogo, 420, 50, 318, 165)
+  image(this.newGameImg, 310, 360, 200, 200)
+  image(this.fruitImg, 365, 415, 90, 90)
 
-  // drawLeaderboard()
-  gameMenu.style.display = "block"
-  // logoutButtonBody.style.display = "block"
   cnv.mouseClicked(check)
   if (isPlay) {
     game()
   }
+  
   //     if (timerValue >= 60) {
   //         text("0:" + timerValue, width / 2, height / 2);
   //     }
@@ -174,7 +172,7 @@ function check() {
 function game() {
   clear()
   background(bg)
-  gameMenu.style.display = "none"
+  // gameMenu.style.display = "none"
   logoutButtonBody.style.display = "none"
   document.getElementById("leaderboard").style.display = "none"
   if (mouseIsPressed) {
@@ -221,9 +219,14 @@ function game() {
   if (frameCount % 2 === 0) {
     sword.update()
   }
+
+  if (timerValue <= 0) {
+    gameOver();
+  }
   sword.draw()
   score += points
   drawScore()
+  drawTimer() 
   drawLives()
 }
 
@@ -257,10 +260,7 @@ function gameOver() {
   clear()
   background(bg)
   lives = 0
-  // button = createButton("Reset");
-  // button.position(450, 350);
-  // button.mousePressed(resetSketch);
-  // Add "Play Again" button
+
   
   const topScore = leaderboardData[9]?.score
   
@@ -273,124 +273,34 @@ function gameOver() {
 }
 
 function addNewHighScores() {
-  //   // Create a card container
-  //   const card = createDiv()
-  //   card.position(600, 350) // Adjust position as needed
-  //   card.size(250, 180) // Width and height of the card
-  //   card.style("background-color", "#ffffff") // Card background color
-  //   card.style("border", "2px solid #ccc") // Border style
-  //   card.style("border-radius", "10px") // Rounded corners
-  //   card.style("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)") // Shadow effect
-  //   card.style("padding", "20px") // Inner spacing
-  //   card.style("text-align", "center") // Center align content
-
-  //   fill(255);
-  //   stroke(200);
-  //   strokeWeight(2);
-  //   rect(200, 150, 400, 300, 10);
-
-  // noLoop()
-  // over.play()
-  // clear()
-  // background(bg)
-  // image(this.gameOverImg, 155, 260, 490, 85)
-  // lives = 0
-
-  // textAlign(CENTER)
-  // const highScoreText = createP("New High Score!")
-  // highScoreText.position(650, 380)
-  // highScoreText.style("font-size", "24px")
-  // highScoreText.style("color", "#ff5722")
-  // highScoreText.style("font-weight", "bold")
-  // highScoreText.style("margin", "0")
-
-  // // Email Input
-  // emailInput = createInput()
-  // emailInput.position(620, 415)
-  // emailInput.size(200, 40) // Width, Height
-  // emailInput.attribute("placeholder", "Email")
-  // // Style the input
-  // emailInput.style("font-size", "18px")
-  // emailInput.style("padding", "8px 12px")
-  // emailInput.style("border", "2px solid #ccc")
-  // emailInput.style("border-radius", "5px")
-  // emailInput.style("outline", "none")
-  // emailInput.style("box-shadow", "0 2px 5px rgba(0,0,0,0.1)")
-  // // emailInput.parent("sketchHolder");
-  // // emailInput.position(620, 415);
-
-  // const submitEmailButton = createButton("Enter")
-  // submitEmailButton.position(760, 465) // Centered
-  // submitEmailButton.style("background-color", "#28a745")
-  // submitEmailButton.style("color", "#ffffff")
-  // submitEmailButton.style("font-size", "20px")
-  // submitEmailButton.style("padding", "10px 20px")
-  // submitEmailButton.style("border", "none")
-  // submitEmailButton.style("border-radius", "5px")
-  // submitEmailButton.style("cursor", "pointer")
-  // submitEmailButton.mousePressed(async () => {
-  //   const email = emailInput.value()
-  //   if (email) {
-  //     console.log(`Email submitted: ${email}`)
-  //     console.log(`new highscore submitted: ${score}`)
-  //     await useAddNewHighScores({ email, score })
-  //     await fetchLeaderboard()
-  //     submitEmailButton.remove()
-  //     highScoreText.remove()
-  //     cancelButton.remove()
-  //     emailInput.remove()
-  //     playAgainButton()
-  //   } else {
-  //     alert("Please enter a valid email.")
-  //   }
-  // })
-  // const canvasX = cnv.position().x;
-  // const canvasY = cnv.position().y;
-  // const cancelButton = createButton("Cancel")
-  // cancelButton.position(canvasX + 700, canvasY + 500) // Centered
-  // cancelButton.style("background-color", "#cc0000")
-  // cancelButton.style("color", "#ffffff")
-  // cancelButton.style("font-size", "20px")
-  // cancelButton.style("padding", "10px 20px")
-  // cancelButton.style("border", "none")
-  // cancelButton.style("border-radius", "5px")
-  // cancelButton.style("cursor", "pointer")
-  // cancelButton.mousePressed(() => {
-  //   cancelButton.remove()
-  //   submitEmailButton.remove()
-  //   highScoreText.remove()
-  //   cancelButton.remove()
-  //   emailInput.remove()
-  //   playAgainButton()
-  // })
-
   showhighScoresForm()
 }
 
 function playAgainButton() {
   drawLeaderboard()
-  gameMenu.style.display = "block"
+  // gameMenu.style.display = "block"
   // logoutButtonBody.style.display = "block"
   // document.getElementById("logout-button").style.display = "block"
-  // image(this.gameOverImg, 155, 260, 490, 85)
-  // image(this.newGameImg, 310, 360, 200, 200)
-  // image(this.fruitImg, 365, 415, 90, 90)
+  image(this.gameOverImg, 155, 260, 490, 85)
+  image(this.newGameImg, 310, 360, 200, 200)
+  image(this.fruitImg, 365, 415, 90, 90)
 
-  // cnv.mouseClicked(() => {
-  //   if (
-  //     mouseX > 365 &&
-  //     mouseX < 365 + 90 && // X bounds of the fruit image
-  //     mouseY > 415 &&
-  //     mouseY < 415 + 90 // Y bounds of the fruit image
-  //   ) {
-  //     start.play()
-  //     score = 0
-  //     lives = 3
-  //     fruit = []
-  //     isPlay = true
-  //     loop()
-  //   }
-  // })
+  cnv.mouseClicked(() => {
+    if (
+      mouseX > 365 &&
+      mouseX < 365 + 90 && // X bounds of the fruit image
+      mouseY > 415 &&
+      mouseY < 415 + 90 // Y bounds of the fruit image
+    ) {
+      start.play()
+      score = 0
+      lives = 3
+      timerValue = 10;
+      fruit = []
+      isPlay = true
+      loop()
+    }
+  })
 }
 
 // Show the login form
@@ -565,30 +475,19 @@ document.addEventListener("DOMContentLoaded", async function () {
   populateLeaderboard(); // Populate leaderboard on page load
 });
 
-// timer = createP("timer");
-// setInterval(timeIt, 1000);
+// Function to draw the timer on the screen
+function drawTimer() {
+  textAlign(CENTER);
+  noStroke();
+  fill(255, 147, 21);
+  textSize(50);
+  text(`Time: ${timerValue}`, width / 2, 50);
+}
+// Decrement the timer every second
+setInterval(() => {
+  if (isPlay && timerValue > 0) {
+    timerValue--;
+  }
+}, 1000);
 
-// textAlign(CENTER);
-// setInterval(timeIt, 1000);
 
-//   if (timerValue == 0) {
-//     text('game over', width / 2, height / 2 + 15);
-//   }
-// fruit.push(new Fruit(random(width),height,3,"#FF00FF",random()));
-// function resetSketch(){
-//     clear();
-//     background(bg);
-//     game();
-// }
-// function timeIt() {
-//     console.log("time");
-//     if (timerValue > 0) {
-//         console.log(timerValue);
-//         timerValue--;
-//         textAlign(CENTER);
-//         noStroke();
-//         fill(255,147,21);
-//         textSize(50);
-//         text(timerValue, 200, 250);
-//     }
-//   }
