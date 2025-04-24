@@ -21,7 +21,7 @@ var boom, spliced, missed, over, start // sounds
 // var timerValue = 60;
 var leaderboardData = []
 
-const playGameButton = document.getElementById("playGame")
+const playGameContainer = document.getElementById("playGameContainer");
 const gameMenu = document.getElementById("gameMenu")
 const logoutButtonBody = document.getElementById("logout")
 
@@ -132,6 +132,9 @@ async function setup() {
   const showLogin = await fetchLocationsSession()
   if (!showLogin) {
     showLoginForm()
+  }else {
+  drawLeaderboard()
+  logoutButtonBody.style.display = "block"
   }
 }
 
@@ -145,11 +148,9 @@ function draw() {
   // image(this.newGameImg, 310, 360, 200, 200)
   // image(this.fruitImg, 365, 415, 90, 90)
 
-  drawLeaderboard()
-  // showhighScoresForm()
-  // showLeaderboardScores()
+  // drawLeaderboard()
   gameMenu.style.display = "block"
-  logoutButtonBody.style.display = "block"
+  // logoutButtonBody.style.display = "block"
   cnv.mouseClicked(check)
   if (isPlay) {
     game()
@@ -369,8 +370,8 @@ function addNewHighScores() {
 function playAgainButton() {
   drawLeaderboard()
   gameMenu.style.display = "block"
-  logoutButtonBody.style.display = "block"
-  document.getElementById("logout-button").style.display = "block"
+  // logoutButtonBody.style.display = "block"
+  // document.getElementById("logout-button").style.display = "block"
   // image(this.gameOverImg, 155, 260, 490, 85)
   // image(this.newGameImg, 310, 360, 200, 200)
   // image(this.fruitImg, 365, 415, 90, 90)
@@ -392,14 +393,13 @@ function playAgainButton() {
   // })
 }
 
-function drawLeaderboard() {
-  showLeaderboardScores()
-}
-
 // Show the login form
 function showLoginForm() {
+  console.log("Hello showLoginForm")
   const loginForm = document.getElementById("login-form")
   loginForm.style.display = "block"
+  // logoutButtonBody.style.display = "none"
+  // document.getElementById("leaderboard").style.display = "none"
 }
 
 function showhighScoresForm() {
@@ -429,6 +429,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       populateLeaderboard()
       console.log(data)
       document.getElementById("login-form").style.display = "none" // Hide the form
+      drawLeaderboard()
     } else {
       alert("Login failed. Please check your credentials.")
     }
@@ -450,6 +451,7 @@ document.getElementById("logout-button").addEventListener("click", async functio
       alert("Logout successful!");
       document.getElementById("login-form").style.display = "block";
       document.getElementById("leaderboard").style.display = "none";
+      document.getElementById("logout").style.display = "none";
     } else {
       alert("Logout failed. Please try again.");
     }
@@ -500,19 +502,30 @@ document.getElementById("cancel").addEventListener("click", function () {
   playAgainButton()
 })
 
-document.getElementById("playGame").addEventListener("click", function () {
-  console.log("play button pressed")
-  start.play()
-  score = 0
-  lives = 3
-  fruit = []
-  isPlay = true
-  loop()
-})
+playGameContainer.addEventListener("click", function (event) {
+  // Check if the clicked element has the "playGame" class
+  if (event.target.classList.contains("playGame")) {
+    console.log("Image clicked:", event.target.alt); // Log the clicked image's alt text
+    start.play();
+    score = 0;
+    lives = 3;
+    fruit = [];
+    isPlay = true;
+    loop();
+  } else {
+    console.log("Clicked outside the images");
+  }
+});
 
-function showLeaderboardScores() {
+function drawLeaderboard() {
   const leaderboard = document.getElementById("leaderboard")
   leaderboard.style.display = "block"
+  logoutButtonBody.style.display = "block"
+}
+
+function logout() {
+  const logout = document.getElementById("logout")
+  logout.style.display = "block"
 }
 
 // Move populateLeaderboard outside the event listener
