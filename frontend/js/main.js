@@ -20,6 +20,7 @@ var boom, spliced, missed, over, start // sounds
 // var seconds, minutes;
 var timerValue = 60
 var leaderboardData = []
+let fruitsSlicedPerPress = 0; // Counter for fruits sliced per mouse press
 
 const playGameContainer = document.getElementById("playGameContainer")
 const gameMenu = document.getElementById("gameMenu")
@@ -169,14 +170,22 @@ function check() {
   }
 }
 
+
 function game() {
   clear()
   background(bg)
   // gameMenu.style.display = "none"
   logoutButtonBody.style.display = "none"
   document.getElementById("leaderboard").style.display = "none"
+
+
   if (mouseIsPressed) {
+        // Reset the counter when the mouse is pressed
+        // if (frameCount % 2 === 0) {
+        //   fruitsSlicedPerPress = 0;
+        // }
     // Draw sword
+    console.log("mouseIsPressed")
     sword.swipe(mouseX, mouseY)
   }
 
@@ -224,6 +233,7 @@ function game() {
         // Sliced fruit
         spliced.play()
         points++
+        fruitsSlicedPerPress++; // Increment the counter for sliced fruits
         fruit[i].update()
         fruit[i].draw()
       }
@@ -259,8 +269,13 @@ function drawLives() {
 }
 
 
+
 function mouseReleased() {
-console.log("mouseReleased")
+  console.log("Fruits sliced in this press:", fruitsSlicedPerPress); // Log the count
+  if (fruitsSlicedPerPress > 1) {
+    score = fruitsSlicedPerPress + score;
+  }
+  fruitsSlicedPerPress = 0
 }
 
 function drawScore() {
@@ -442,6 +457,11 @@ playGameContainer.addEventListener("click", function (event) {
   }
 })
 
+function mouseDragged() {
+  // Your slicing logic here (if needed)
+  return false; // <-- Prevents default dragging behavior
+}
+
 function drawLeaderboard() {
   const leaderboard = document.getElementById("leaderboard")
   leaderboard.style.display = "block"
@@ -506,13 +526,3 @@ setInterval(() => {
     timerValue--
   }
 }, 1000)
-
-// Prevent touchmove from scrolling the page
-document.body.addEventListener('touchmove', function (e) {
-  e.preventDefault();
-}, { passive: false });
-
-// Optionally also prevent mouse drag behavior
-document.body.addEventListener('mousedown', function (e) {
-  e.preventDefault();
-});
