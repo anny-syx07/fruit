@@ -20,7 +20,7 @@ var boom, spliced, missed, over, start // sounds
 // var seconds, minutes;
 var timerValue = 60
 var leaderboardData = []
-let fruitsSlicedPerPress = 0; // Counter for fruits sliced per mouse press
+let fruitsSlicedPerPress = 0 // Counter for fruits sliced per mouse press
 
 const playGameContainer = document.getElementById("playGameContainer")
 const gameMenu = document.getElementById("gameMenu")
@@ -170,7 +170,6 @@ function check() {
   }
 }
 
-
 function game() {
   clear()
   background(bg)
@@ -178,12 +177,11 @@ function game() {
   logoutButtonBody.style.display = "none"
   document.getElementById("leaderboard").style.display = "none"
 
-
   if (mouseIsPressed) {
-        // Reset the counter when the mouse is pressed
-        // if (frameCount % 2 === 0) {
-        //   fruitsSlicedPerPress = 0;
-        // }
+    // Reset the counter when the mouse is pressed
+    // if (frameCount % 2 === 0) {
+    //   fruitsSlicedPerPress = 0;
+    // }
     // Draw sword
     console.log("mouseIsPressed")
     sword.swipe(mouseX, mouseY)
@@ -194,13 +192,13 @@ function game() {
       fruit.push(randomFruit()) // Display new fruit
     }
     if (timerValue < 30) {
-        if (noise(frameCount) > 0.69) {
-          fruit.push(randomFruit())
+      if (noise(frameCount) > 0.69) {
+        fruit.push(randomFruit())
       }
     }
     if (timerValue < 20) {
-        if (noise(frameCount) > 0.69) {
-          fruit.push(randomFruit()) 
+      if (noise(frameCount) > 0.69) {
+        fruit.push(randomFruit())
       }
     }
   }
@@ -233,7 +231,7 @@ function game() {
         // Sliced fruit
         spliced.play()
         points++
-        fruitsSlicedPerPress++; // Increment the counter for sliced fruits
+        fruitsSlicedPerPress++ // Increment the counter for sliced fruits
         fruit[i].update()
         fruit[i].draw()
       }
@@ -268,12 +266,10 @@ function drawLives() {
   }
 }
 
-
-
 function mouseReleased() {
-  console.log("Fruits sliced in this press:", fruitsSlicedPerPress); // Log the count
+  // console.log("Fruits sliced in this press:", fruitsSlicedPerPress); // Log the count
   if (fruitsSlicedPerPress > 1) {
-    score = fruitsSlicedPerPress + score;
+    score = fruitsSlicedPerPress + score
   }
   fruitsSlicedPerPress = 0
 }
@@ -294,6 +290,13 @@ function gameOver() {
   background(bg)
   lives = 0
 
+  // Check if leaderboardData is empty
+  if (leaderboardData.length === 0 || leaderboardData.length < 10) {
+    console.log("Leaderboard is empty or incomplete. Showing addNewHighScores form.");
+    addNewHighScores();
+    return; // Exit the function early
+  }
+
   const topScore = leaderboardData[9]?.score
 
   if (score > topScore) {
@@ -313,7 +316,7 @@ function playAgainButton() {
   // gameMenu.style.display = "block"
   // logoutButtonBody.style.display = "block"
   // document.getElementById("logout-button").style.display = "block"
-  image(this.gameOverImg, 155, 260, 490, 85)
+  image(this.gameOverImg, 150, 80, 490, 85)
   image(this.newGameImg, 310, 360, 200, 200)
   image(this.fruitImg, 365, 415, 90, 90)
 
@@ -406,40 +409,42 @@ document.getElementById("logout-button").addEventListener("click", async functio
 document.getElementById("highScoresForm").addEventListener("submit", async function (event) {
   event.preventDefault()
 
+  const email = event.target.querySelector("#email").value
   const clickedButton = event.submitter
   console.log(`Button pressed: ${clickedButton.id}`) // Log the button's id
 
-  const email = document.getElementById("email").value
-
-  try {
-    if (!email) {
-      alert("Please enter a valid email.")
-      return
-    }
-
-    const response = await fetch(`http://localhost:3000/highscores`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, score }),
-    })
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    // console.log("High score submitted successfully:", result)
-    await fetchLeaderboard()
-    document.getElementById("high_scores").style.display = "none" // Hide the form
+  if (clickedButton.id === "cancel") {
+    console.log("Cancel button pressed")
+    document.getElementById("high_scores").style.display = "none"
     playAgainButton()
-    return response
-  } catch (error) {
-    console.error("Error submitting high score:", error)
+    return
   }
-})
 
-// Separate event listener for the "Cancel" button
-document.getElementById("cancel").addEventListener("click", function () {
-  console.log("Cancel button pressed")
-  document.getElementById("high_scores").style.display = "none" // Hide the form
-  playAgainButton()
+  if (clickedButton.id === "enter") {
+    try {
+      if (!email) {
+        alert("Please enter a valid email.")
+        return
+      }
+
+      const response = await fetch(`http://localhost:3000/highscores`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, score }),
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      // console.log("High score submitted successfully:", result)
+      await fetchLeaderboard()
+      populateLeaderboard()
+      document.getElementById("high_scores").style.display = "none" // Hide the form
+      playAgainButton()
+      return response
+    } catch (error) {
+      console.error("Error submitting high score:", error)
+    }
+  }
 })
 
 playGameContainer.addEventListener("click", function (event) {
@@ -457,9 +462,53 @@ playGameContainer.addEventListener("click", function (event) {
   }
 })
 
+//open modal to resret leaderboard button
+document.getElementById("reset_leaderboard").addEventListener("click", function (event) {
+  const confirmResetModal = document.getElementById("confirm_reset")
+  confirmResetModal.style.display = "block"
+})
+
+//modal to resret leaderboard
+document.getElementById("resetLeaderboardForm").addEventListener("submit", async function (event) {
+  event.preventDefault()
+  const confirmResetModal = document.getElementById("confirm_reset")
+  const clickedButton = event.submitter
+  const passwordInput = event.target.querySelector("#location_password").value
+  console.log(clickedButton.id)
+  if (clickedButton.id === "reset_cancel") {
+    confirmResetModal.style.display = "none"
+    return
+  }
+
+  if (clickedButton.id === "reset_enter") {
+    try {
+      if (!passwordInput) {
+        alert("Please enter a valid password.")
+        return
+      }
+
+      const response = await fetch(`http://localhost:3000/highscores/reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: passwordInput }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      console.log("Leaderboard reset successfully.")
+      await fetchLeaderboard()
+      confirmResetModal.style.display = "none"
+    } catch (error) {
+      console.error("Error resetting leaderboard:", error)
+    }
+  }
+})
+
 function mouseDragged() {
   // Your slicing logic here (if needed)
-  return false; // <-- Prevents default dragging behavior
+  return false // <-- Prevents default dragging behavior
 }
 
 function drawLeaderboard() {
@@ -476,8 +525,9 @@ function logout() {
 // Move populateLeaderboard outside the event listener
 function populateLeaderboard() {
   const leaderboardRows = document.getElementById("leaderboard-rows")
-  leaderboardRows.innerHTML = "" // Clear existing rows
   console.log("populateLeaderboard: ", leaderboardData)
+
+  leaderboardRows.innerHTML = "";
 
   leaderboardData.forEach((player, index) => {
     const opacity = Math.max(0.3, 1 - (index + 1 - 3) * 0.08)
@@ -502,9 +552,36 @@ function populateLeaderboard() {
           </div>
       </div>
     `
-    leaderboardRows.innerHTML += rowContent
+
+    leaderboardRows.insertAdjacentHTML("beforeend", rowContent)
   })
 }
+
+/* document.addEventListener("DOMContentLoaded", () => {
+  const confirmResetModal = document.getElementById("confirm_reset");
+  const overlay = document.getElementById("overlay");
+  const cancelButton = document.getElementById("cancel");
+
+  // Function to show the modal
+  function showModal() {
+      confirmResetModal.classList.add("show");
+      overlay.classList.remove("hidden");
+      overlay.style.display = "block";
+  }
+
+  // Function to hide the modal
+  function hideModal() {
+      confirmResetModal.classList.remove("show");
+      overlay.classList.add("hidden");
+      overlay.style.display = "none";
+  }
+
+  // Attach event listeners
+  cancelButton.addEventListener("click", hideModal);
+
+  // Example: Show the modal (you can trigger this based on your logic)
+  showModal();
+}); */
 
 // Keep the DOMContentLoaded event listener for initial population
 document.addEventListener("DOMContentLoaded", async function () {
