@@ -604,3 +604,30 @@ setInterval(() => {
     timerValue--
   }
 }, 1000)
+
+// function randomFruit(){ 
+//   // Use this modified version to increase bomb frequency
+//   var x = random(width);
+//   var y = height;
+//   var size = noise(frameCount)*20 + 40;
+//   var col = color(random(255),random(255),random(255));
+//   var speed = random(3,5);
+  
+//   // Increase chance of bomb appearing
+//   var idx;
+//   if (random() < bombProbability) {
+//     // Generate a bomb (last item in fruitsList)
+//     idx = fruitsList.length - 1;
+//   } else {
+//     // Generate regular fruit (any item except the last one which is the bomb)
+//     idx = round(random(0, fruitsList.length - 2));
+//   }
+  
+//   var fruit = fruitsImgs[idx];
+//   var slicedFruit1 = (idx < fruitsList.length - 1) ? slicedFruitsImgs[2*idx] : null;
+//   var slicedFruit2 = (idx < fruitsList.length - 1) ? slicedFruitsImgs[2*idx + 1] : null;
+//   var name = fruitsList[idx];
+
+  
+//   return new Fruit(x,y,speed,col,size,fruit,slicedFruit1,slicedFruit2,name);
+// }
