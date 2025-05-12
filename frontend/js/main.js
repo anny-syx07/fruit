@@ -120,7 +120,11 @@ async function useAddNewHighScores({ email, score }) {
 let emailInput, passwordInput, loginButton, loginMessage
 
 async function setup() {
-  cnv = createCanvas(800, 635)
+  const container = document.getElementById("gameCanvas")
+  const width = container.clientWidth
+  const height = container.clientHeight
+
+  cnv = createCanvas(width, height)
   cnv.parent("gameCanvas")
   sword = new Sword(color("#FFFFFF"))
   frameRate(60)
@@ -138,6 +142,13 @@ async function setup() {
     logoutButtonBody.style.display = "block"
   }
 }
+
+window.addEventListener("resize", () => {
+  const container = document.getElementById("gameCanvas")
+  if (container) {
+    resizeCanvas(container.clientWidth, container.clientHeight)
+  }
+})
 
 function draw() {
   clear()
