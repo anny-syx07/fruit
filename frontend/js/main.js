@@ -552,8 +552,8 @@ function populateLeaderboard() {
         : `bg-gradient-to-r from-orange-200 to-orange-400`
 
     const rowContent = `
-      <div class="leaderboard-row flex items-center gap-4 rounded-xl text-sm p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
-          <h1 class="rank flex justify-center items-center border-2 border-double border-red-900 w-6 rounded-full text-center font-bold">${
+      <div class="leaderboard-row flex items-center gap-4 max-md:gap-2 rounded-xl max-md:text-xs text-sm p-2 border-b border-orange-500 ${backgroundColor} opacity-${opacity}">
+          <h1 class="rank flex justify-center items-center border-2 border-double border-red-900 size-6 max-md:size-5 rounded-full text-center font-bold">${
             index + 1
           }</h1>
           <h1 class="username flex-auto text-start font-medium">${player.email}</h1>

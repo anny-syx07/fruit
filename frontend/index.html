@@ -54,9 +54,9 @@
           </button>
         </div>
         <div id="rotate-portrait-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
-            <img src="images/rotate-phone.png" alt="Rotate Device" class="w-24 mb-4" />
-            <p class="text-white text-xl font-bold">Please rotate your device to <span class="text-yellow-300">landscape</span> mode</p>
-          </div>
+          <img src="images/rotate-phone.png" alt="Rotate Device" class="w-24 mb-4" />
+          <p class="text-white text-xl font-bold">Please rotate your device to <span class="text-yellow-300">landscape</span> mode</p>
+        </div>
       </div>
     </div>
 
@@ -142,10 +142,9 @@
         </div>
       </form>
     </div>
-
-    <div
+  <div
       id="leaderboard"
-      class="absolute space-y-3 w-full bottom-2 left-2 bg-gradient-to-b from-orange-200 to-orange-300 rounded-3xl p-3 shadow-xl hidden"
+      class="absolute space-y-3 md:w-96 w-full bottom-2 left-2 max-md:left-1/2 max-md:transform max-md:-translate-x-1/2 bg-gradient-to-b from-orange-200 to-orange-300 rounded-3xl p-3 shadow-xl hidden"
     >
       <!-- Header -->
       <div class="relative h-12 mt-3 mx-3 flex items-center justify-center">
@@ -159,11 +158,12 @@
         <!-- <div>
                 <button id="reset_leaderboard" class="py-1 px-4 bg-red-500 text-white rounded-xl hover:bg-orange-600">Reset</button>
                 </div> -->
-        <div id="leaderboard-rows" class="space-y-1 grid grid-cols-2">
+        <div id="leaderboard-rows" class="md:space-y-1 max-md:grid max-md:grid-flow-col max-md:grid-rows-5 gap-1">
           <!-- Rows will be inserted here by JavaScript -->
         </div>
       </div>
     </div>
+  
 
     <!-- <div id="gameMenu" class="relative w-[800px] h-[635px] mt-5 hidden">
         <div class="flex justify-center items-center gap-4">
@@ -176,36 +176,38 @@
         </div>
     </div> -->
 
-
-<!-- Show rotation warning when in mobile view -->
-    <script>
-        function checkOrientation() {
-          const overlay = document.getElementById("rotate-portrait-overlay");
-          const isMobile = window.matchMedia("(max-width: 767px)").matches;
-          const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-          if (isMobile && isPortrait) {
-            overlay.classList.add("active");
+<!-- Display the rotate overlay in mobile portrait view -->
+<script>
+    function checkOrientation() {
+        const overlay = document.getElementById("rotate-portrait-overlay");
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+        if (isMobile && isPortrait) {
+            overlay.classList.remove("hidden");
+            overlay.classList.add("flex");
             document.body.style.overflow = "hidden";
-          } else {
-            overlay.classList.remove("active");
+        } else {
+            overlay.classList.add("hidden");
+            overlay.classList.remove("flex");
             document.body.style.overflow = "";
-          }
         }
-        window.addEventListener("resize", checkOrientation);
-        window.addEventListener("orientationchange", checkOrientation);
-        window.addEventListener("DOMContentLoaded", checkOrientation);
-        </script>
+    }
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+    window.addEventListener("DOMContentLoaded", checkOrientation);
+</script>
 
-    <!-- P5JS LIBRARY -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src=script://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-script.js"></script>
-    <script type="text/javascript" src="p5/p5.js"></script>
-    <scriptscript type="text/javascript" src="p5/addons/p5.dom.js"></scriptscript <script type="text/javascript" src="p5/addons/p5.sound.js"></script>
-    <script src="https://cdn.tailwindcssscript</script>
+<!-- P5.js and jQuery Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="p5/p5.js"></script>
+<script type="text/javascript" src="p5/addons/p5.dom.js"></script>
+<script type="text/javascript" src="p5/addons/p5.sound.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- JS FILES -->
-    <script src=scriptmain.js"></script>
-    <script src="./js/swords.js"></script>
-    <script src="./js/fruit.js"></script>
-  </body>
+<!-- Custom JavaScript Files -->
+<script src="./js/main.js"></script>
+<script src="./js/swords.js"></script>
+<script src="./js/fruit.js"></script>
+</body>
 </html>
