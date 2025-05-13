@@ -23,7 +23,6 @@ var leaderboardData = []
 let fruitsSlicedPerPress = 0 // Counter for fruits sliced per mouse press
 
 const playGameContainer = document.getElementById("playGameContainer")
-const gameMenu = document.getElementById("gameMenu")
 const logoutButtonBody = document.getElementById("logout")
 
 function preload() {
@@ -154,11 +153,13 @@ function draw() {
   clear()
   background(bg)
 
-  image(this.foregroundImg, 0, 0, 800, 350)
-  image(this.fruitLogo, 40, 20, 358, 195)
-  image(this.ninjaLogo, 420, 50, 318, 165)
-  image(this.newGameImg, 310, 360, 200, 200)
-  image(this.fruitImg, 365, 415, 90, 90)
+  // image(this.foregroundImg, 0, 0, 800, 350)
+  // image(this.fruitLogo, 40, 20, 358, 195)
+  // image(this.ninjaLogo, 420, 50, 318, 165)
+  // image(this.newGameImg, 310, 360, 200, 200)
+  // image(this.fruitImg, 365, 415, 90, 90)
+  // gameMenu.classList.remove("hidden")
+  showGameMenu(0, 0)
 
   cnv.mouseClicked(check)
   if (isPlay) {
@@ -177,7 +178,8 @@ function check() {
 function game() {
   clear()
   background(bg)
-  // gameMenu.style.display = "none"
+  // gameMenu.classList.add("hidden")
+  showGameMenu(0, 1)
   logoutButtonBody.style.display = "none"
   document.getElementById("leaderboard").style.display = "none"
 
@@ -296,9 +298,9 @@ function gameOver() {
 
   // Check if leaderboardData is empty
   if (leaderboardData.length === 0 || leaderboardData.length < 10) {
-    console.log("Leaderboard is empty or incomplete. Showing addNewHighScores form.");
-    addNewHighScores();
-    return; // Exit the function early
+    console.log("Leaderboard is empty or incomplete. Showing addNewHighScores form.")
+    addNewHighScores()
+    return // Exit the function early
   }
 
   const topScore = leaderboardData[9]?.score
@@ -317,10 +319,11 @@ function addNewHighScores() {
 
 function playAgainButton() {
   drawLeaderboard()
-  image(this.gameOverImg, 150, 80, 490, 85)
-  image(this.newGameImg, 310, 360, 200, 200)
-  image(this.fruitImg, 365, 415, 90, 90)
-
+  // gameOverMenu.classList.remove("hidden")
+  // image(this.gameOverImg, 150, 80, 490, 85)
+  // image(this.newGameImg, 310, 360, 200, 200)
+  // image(this.fruitImg, 365, 415, 90, 90)
+  showGameMenu(1, 0)
   cnv.mouseClicked(() => {
     if (
       mouseX > 365 &&
@@ -339,11 +342,36 @@ function playAgainButton() {
   })
 }
 
+// show Game Menu
+function showGameMenu(gameOver = 0, isHidden = 0) {
+  const gameMenu2 = document.getElementById("gameMenu")
+  const fruit_img = document.querySelector('img[alt="fruit"]');
+  const ninja_img = document.querySelector('img[alt="ninja"]');
+  const gameOver_img = document.querySelector('img[alt="gameOver"]');
+  if(isHidden){
+    gameMenu2.classList.add("hidden")
+  }else{
+    gameMenu2.classList.remove("hidden")
+  }
+
+  if (gameOver) {
+    gameOver_img.classList.remove("hidden")
+    fruit_img.classList.add("hidden")
+    ninja_img.classList.add("hidden")
+  }else {
+    gameOver_img.classList.add("hidden")
+    fruit_img.classList.remove("hidden")
+    ninja_img.classList.remove("hidden")
+  }
+
+  // document.getElementById("leaderboard").style.display = "none"
+}
+
 // Show the login form
 function showLoginForm() {
   console.log("Hello showLoginForm")
   const loginForm = document.getElementById("login-form")
-  loginForm.classList.remove("hidden");
+  loginForm.classList.remove("hidden")
   document.getElementById("leaderboard").style.display = "none"
 }
 
@@ -373,7 +401,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       await fetchLeaderboard()
       populateLeaderboard()
       console.log(data)
-      document.getElementById("login-form").classList.add("hidden"); // Hide the form
+      document.getElementById("login-form").classList.add("hidden") // Hide the form
       drawLeaderboard()
     } else {
       alert("Login failed. Please check your credentials.")
@@ -393,7 +421,7 @@ document.getElementById("logout-button").addEventListener("click", async functio
 
     if (response.ok) {
       alert("Logout successful!")
-      document.getElementById("login-form").classList.remove("hidden");
+      document.getElementById("login-form").classList.remove("hidden")
       document.getElementById("leaderboard").style.display = "none"
       document.getElementById("logout").style.display = "none"
     } else {
@@ -468,7 +496,6 @@ playGameContainer.addEventListener("click", function (event) {
 //   confirmResetModal.style.display = "block"
 // })
 
-
 //modal to resret leaderboard
 document.getElementById("resetLeaderboardForm").addEventListener("submit", async function (event) {
   event.preventDefault()
@@ -480,24 +507,24 @@ document.getElementById("resetLeaderboardForm").addEventListener("submit", async
     confirmResetModal.style.display = "none"
     return
   }
-  
+
   if (clickedButton.id === "reset_enter") {
     try {
       if (!passwordInput) {
         alert("Please enter a valid password.")
         return
       }
-      
+
       const response = await fetch(`http://localhost:3000/highscores/reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password: passwordInput }),
       })
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
+
       console.log("Leaderboard reset successfully.")
       await fetchLeaderboard()
       confirmResetModal.style.display = "none"
@@ -513,10 +540,10 @@ function mouseDragged() {
 }
 
 function drawLeaderboard() {
-  const isMobile = window.matchMedia("(max-width: 767px)").matches;
-  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-  if (isMobile && isPortrait) return; // Don't show leaderboard on mobile portrait
-  
+  const isMobile = window.matchMedia("(max-width: 767px)").matches
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches
+  if (isMobile && isPortrait) return // Don't show leaderboard on mobile portrait
+
   const leaderboard = document.getElementById("leaderboard")
   leaderboard.style.display = "block"
   logoutButtonBody.style.display = "block"
@@ -534,7 +561,6 @@ document.getElementById("leaderboardOpenButton").addEventListener("click", funct
   leaderboard.style.display = "block"
 })
 
-
 function logout() {
   const logout = document.getElementById("logout")
   logout.style.display = "block"
@@ -545,7 +571,7 @@ function populateLeaderboard() {
   const leaderboardRows = document.getElementById("leaderboard-rows")
   console.log("populateLeaderboard: ", leaderboardData)
 
-  leaderboardRows.innerHTML = "";
+  leaderboardRows.innerHTML = ""
 
   leaderboardData.forEach((player, index) => {
     const opacity = Math.max(0.3, 1 - (index + 1 - 3) * 0.08)
@@ -624,39 +650,39 @@ setInterval(() => {
   }
 }, 1000)
 
-// Display the rotate overlay in mobile portrait view 
+// Display the rotate overlay in mobile portrait view
 function checkOrientation() {
-  const overlay = document.getElementById("rotate-portrait-overlay");
-  const isMobile = window.matchMedia("(max-width: 767px)").matches;
-  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  const overlay = document.getElementById("rotate-portrait-overlay")
+  const isMobile = window.matchMedia("(max-width: 767px)").matches
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches
 
   if (isMobile && isPortrait) {
-      overlay.classList.remove("hidden");
-      overlay.classList.add("flex");
-      document.body.style.overflow = "hidden";
-      document.getElementById("leaderboard").style.display = "none"
-    } else {
-      overlay.classList.add("hidden");
-      overlay.classList.remove("flex");
-      document.body.style.overflow = "";
-      if (session){
-        document.getElementById("leaderboard").style.display = "block"
-      }
+    overlay.classList.remove("hidden")
+    overlay.classList.add("flex")
+    document.body.style.overflow = "hidden"
+    document.getElementById("leaderboard").style.display = "none"
+  } else {
+    overlay.classList.add("hidden")
+    overlay.classList.remove("flex")
+    document.body.style.overflow = ""
+    if (session) {
+      document.getElementById("leaderboard").style.display = "block"
+    }
   }
 }
 
-window.addEventListener("resize", checkOrientation);
-window.addEventListener("orientationchange", checkOrientation);
-window.addEventListener("DOMContentLoaded", checkOrientation);
+window.addEventListener("resize", checkOrientation)
+window.addEventListener("orientationchange", checkOrientation)
+window.addEventListener("DOMContentLoaded", checkOrientation)
 
-// function randomFruit(){ 
+// function randomFruit(){
 //   // Use this modified version to increase bomb frequency
 //   var x = random(width);
 //   var y = height;
 //   var size = noise(frameCount)*20 + 40;
 //   var col = color(random(255),random(255),random(255));
 //   var speed = random(3,5);
-  
+
 //   // Increase chance of bomb appearing
 //   var idx;
 //   if (random() < bombProbability) {
@@ -666,12 +692,11 @@ window.addEventListener("DOMContentLoaded", checkOrientation);
 //     // Generate regular fruit (any item except the last one which is the bomb)
 //     idx = round(random(0, fruitsList.length - 2));
 //   }
-  
+
 //   var fruit = fruitsImgs[idx];
 //   var slicedFruit1 = (idx < fruitsList.length - 1) ? slicedFruitsImgs[2*idx] : null;
 //   var slicedFruit2 = (idx < fruitsList.length - 1) ? slicedFruitsImgs[2*idx + 1] : null;
 //   var name = fruitsList[idx];
 
-  
 //   return new Fruit(x,y,speed,col,size,fruit,slicedFruit1,slicedFruit2,name);
 // }

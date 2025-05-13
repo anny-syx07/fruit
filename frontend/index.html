@@ -33,13 +33,14 @@
         class="relative lg:w-[800px] lg:h-[635px] md:w-[750px] md:h-[600px] w-screen h-screen md:mt-5 bg-black rounded-md shadow-lg overflow-hidden"
       >
         <div id="gameMenu" class="absolute right-0 left-0 hidden">
-          <div class="flex justify-center items-center gap-4 sm:mt-4">
-            <img src="images/fruit.png" alt="newgame" class="w-[358px] h-[195px]" />
-            <img src="images/ninja.png" alt="fruit" class="w-[318px] h-[165px] mt-5" />
+          <div class="flex justify-center items-center gap-4 sm:mt-10">
+            <img src="images/fruit.png" alt="fruit" class="md:w-[358px] md:h-[195px] w-[200px] h-[95px]" />
+            <img src="images/ninja.png" alt="ninja" class="md:w-[318px] md:h-[165px] w-[218px] h-[90px] mt-5" />
+            <img src="images/game-over.png" alt="gameOver" class="md:w-[500px] md:h-[140px] w-[300px] h-[75px] mt-8 hidden" />
           </div>
-          <div id="playGameContainer" class="relative w-full h-[400px] flex items-center justify-center">
-            <img src="images/new-game.png" alt="newgame" class="playGame absolute w-[200px] h-[200px]" />
-            <img src="images/fruitMode.png" alt="fruit" class="playGame absolute w-[90px] h-[90px]" />
+          <div id="playGameContainer" class="relative w-full md:h-[400px] max-md:mt-32 flex items-center justify-center">
+            <img src="images/new-game.png" alt="newgame" class="playGame absolute md:w-[200px] md:h-[200px] w-[150px] h-[150px]" />
+            <img src="images/fruitMode.png" alt="fruitMode" class="playGame absolute md:w-[90px] md:h-[90px] w-[70px] h-[70px]" />
           </div>
         </div>
         <div id="logout" class="absolute top-52 right-2 bg-gradient-to-b from-orange-200 to-orange-400 p-3 rounded-3xl w-32 hidden">
@@ -50,7 +51,7 @@
           class="absolute top-80 right-2 bg-gradient-to-b from-orange-200 to-orange-400 p-3 rounded-3xl w-32 md:hidden"
         >
           <button id="leaderboardOpenButton" class="w-full py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 w-20">
-            Dashboard
+            Leaderboard
           </button>
         </div>
         <div id="rotate-portrait-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 hidden">
