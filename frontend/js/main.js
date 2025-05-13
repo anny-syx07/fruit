@@ -117,7 +117,7 @@ async function useAddNewHighScores({ email, score }) {
   }
 }
 
-let emailInput, passwordInput, loginButton, loginMessage
+let emailInput, passwordInput, loginButton, loginMessage, session
 
 async function setup() {
   const container = document.getElementById("gameCanvas")
@@ -134,7 +134,7 @@ async function setup() {
   masterVolume(0)
   await fetchLeaderboard()
 
-  const showLogin = await fetchLocationsSession()
+  const showLogin = session
   if (!showLogin) {
     showLoginForm()
   } else {
@@ -604,6 +604,7 @@ function populateLeaderboard() {
 // Keep the DOMContentLoaded event listener for initial population
 document.addEventListener("DOMContentLoaded", async function () {
   await fetchLeaderboard()
+  session = await fetchLocationsSession()
   console.log("first time")
   populateLeaderboard() // Populate leaderboard on page load
 })
@@ -624,11 +625,10 @@ setInterval(() => {
 }, 1000)
 
 // Display the rotate overlay in mobile portrait view 
-async function checkOrientation() {
+function checkOrientation() {
   const overlay = document.getElementById("rotate-portrait-overlay");
   const isMobile = window.matchMedia("(max-width: 767px)").matches;
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-  const isLogin = await fetchLocationsSession()
 
   if (isMobile && isPortrait) {
       overlay.classList.remove("hidden");
@@ -639,11 +639,12 @@ async function checkOrientation() {
       overlay.classList.add("hidden");
       overlay.classList.remove("flex");
       document.body.style.overflow = "";
-      if (isLogin){
+      if (session){
         document.getElementById("leaderboard").style.display = "block"
       }
   }
 }
+
 window.addEventListener("resize", checkOrientation);
 window.addEventListener("orientationchange", checkOrientation);
 window.addEventListener("DOMContentLoaded", checkOrientation);
