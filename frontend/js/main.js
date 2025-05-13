@@ -164,13 +164,6 @@ function draw() {
   if (isPlay) {
     game()
   }
-
-  //     if (timerValue >= 60) {
-  //         text("0:" + timerValue, width / 2, height / 2);
-  //     }
-  //     if (timerValue < 60) {
-  //         text('0:0' + timerValue, width / 2, height / 2);
-  //     }
 }
 
 function check() {
@@ -324,9 +317,6 @@ function addNewHighScores() {
 
 function playAgainButton() {
   drawLeaderboard()
-  // gameMenu.style.display = "block"
-  // logoutButtonBody.style.display = "block"
-  // document.getElementById("logout-button").style.display = "block"
   image(this.gameOverImg, 150, 80, 490, 85)
   image(this.newGameImg, 310, 360, 200, 200)
   image(this.fruitImg, 365, 415, 90, 90)
@@ -353,9 +343,8 @@ function playAgainButton() {
 function showLoginForm() {
   console.log("Hello showLoginForm")
   const loginForm = document.getElementById("login-form")
-  loginForm.style.display = "block"
-  // logoutButtonBody.style.display = "none"
-  // document.getElementById("leaderboard").style.display = "none"
+  loginForm.classList.remove("hidden");
+  document.getElementById("leaderboard").style.display = "none"
 }
 
 function showhighScoresForm() {
@@ -384,7 +373,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       await fetchLeaderboard()
       populateLeaderboard()
       console.log(data)
-      document.getElementById("login-form").style.display = "none" // Hide the form
+      document.getElementById("login-form").classList.add("hidden"); // Hide the form
       drawLeaderboard()
     } else {
       alert("Login failed. Please check your credentials.")
@@ -404,7 +393,7 @@ document.getElementById("logout-button").addEventListener("click", async functio
 
     if (response.ok) {
       alert("Logout successful!")
-      document.getElementById("login-form").style.display = "block"
+      document.getElementById("login-form").classList.remove("hidden");
       document.getElementById("leaderboard").style.display = "none"
       document.getElementById("logout").style.display = "none"
     } else {
@@ -479,6 +468,7 @@ playGameContainer.addEventListener("click", function (event) {
 //   confirmResetModal.style.display = "block"
 // })
 
+
 //modal to resret leaderboard
 document.getElementById("resetLeaderboardForm").addEventListener("submit", async function (event) {
   event.preventDefault()
@@ -490,24 +480,24 @@ document.getElementById("resetLeaderboardForm").addEventListener("submit", async
     confirmResetModal.style.display = "none"
     return
   }
-
+  
   if (clickedButton.id === "reset_enter") {
     try {
       if (!passwordInput) {
         alert("Please enter a valid password.")
         return
       }
-
+      
       const response = await fetch(`http://localhost:3000/highscores/reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password: passwordInput }),
       })
-
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
+      
       console.log("Leaderboard reset successfully.")
       await fetchLeaderboard()
       confirmResetModal.style.display = "none"
@@ -523,10 +513,27 @@ function mouseDragged() {
 }
 
 function drawLeaderboard() {
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  if (isMobile && isPortrait) return; // Don't show leaderboard on mobile portrait
+  
   const leaderboard = document.getElementById("leaderboard")
   leaderboard.style.display = "block"
   logoutButtonBody.style.display = "block"
 }
+
+//close leaderboard button
+document.getElementById("leaderboardCloseButton").addEventListener("click", function (event) {
+  const leaderboard = document.getElementById("leaderboard")
+  leaderboard.style.display = "none"
+})
+
+//open leaderboard button
+document.getElementById("leaderboardOpenButton").addEventListener("click", function (event) {
+  const leaderboard = document.getElementById("leaderboard")
+  leaderboard.style.display = "block"
+})
+
 
 function logout() {
   const logout = document.getElementById("logout")
@@ -615,6 +622,31 @@ setInterval(() => {
     timerValue--
   }
 }, 1000)
+
+// Display the rotate overlay in mobile portrait view 
+async function checkOrientation() {
+  const overlay = document.getElementById("rotate-portrait-overlay");
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  const isLogin = await fetchLocationsSession()
+
+  if (isMobile && isPortrait) {
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+      document.body.style.overflow = "hidden";
+      document.getElementById("leaderboard").style.display = "none"
+    } else {
+      overlay.classList.add("hidden");
+      overlay.classList.remove("flex");
+      document.body.style.overflow = "";
+      if (isLogin){
+        document.getElementById("leaderboard").style.display = "block"
+      }
+  }
+}
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
+window.addEventListener("DOMContentLoaded", checkOrientation);
 
 // function randomFruit(){ 
 //   // Use this modified version to increase bomb frequency
