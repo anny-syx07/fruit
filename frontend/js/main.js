@@ -152,13 +152,6 @@ window.addEventListener("resize", () => {
 function draw() {
   clear()
   background(bg)
-
-  // image(this.foregroundImg, 0, 0, 800, 350)
-  // image(this.fruitLogo, 40, 20, 358, 195)
-  // image(this.ninjaLogo, 420, 50, 318, 165)
-  // image(this.newGameImg, 310, 360, 200, 200)
-  // image(this.fruitImg, 365, 415, 90, 90)
-  // gameMenu.classList.remove("hidden")
   showGameMenu(0, 0)
 
   cnv.mouseClicked(check)
@@ -319,10 +312,7 @@ function addNewHighScores() {
 
 function playAgainButton() {
   drawLeaderboard()
-  // gameOverMenu.classList.remove("hidden")
-  // image(this.gameOverImg, 150, 80, 490, 85)
-  // image(this.newGameImg, 310, 360, 200, 200)
-  // image(this.fruitImg, 365, 415, 90, 90)
+
   showGameMenu(1, 0)
   cnv.mouseClicked(() => {
     if (
