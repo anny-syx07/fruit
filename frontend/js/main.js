@@ -170,7 +170,7 @@ function check() {
 
 function game() {
   clear()
-  background(bg)
+  background(bg) 
   // gameMenu.classList.add("hidden")
   showGameMenu(0, 1)
   logoutButtonBody.style.display = "none"
@@ -193,7 +193,7 @@ function game() {
     if (timerValue < 30) {
       if (noise(frameCount) > 0.69) {
         fruit.push(randomFruit())
-      }
+      }  
     }
     if (timerValue < 20) {
       if (noise(frameCount) > 0.69) {
@@ -212,13 +212,13 @@ function game() {
         // Missed fruit
         image(this.livesImgs2[0], fruit[i].x, fruit[i].y - 120, 50, 50)
         missed.play()
-        lives--
+        lives-- 
         x++
       }
       if (lives < 1) {
         // Check for lives
         gameOver()
-      }
+      } 
       fruit.splice(i, 1)
     } else {
       if (fruit[i].sliced && fruit[i].name == "boom") {
@@ -367,7 +367,7 @@ function showLoginForm() {
 
 function showhighScoresForm() {
   const highscores = document.getElementById("high_scores")
-  highscores.style.display = "block"
+  highscores.classList.remove("hidden")
 }
 
 // Handle login form submission
@@ -433,7 +433,7 @@ document.getElementById("highScoresForm").addEventListener("submit", async funct
 
   if (clickedButton.id === "cancel") {
     console.log("Cancel button pressed")
-    document.getElementById("high_scores").style.display = "none"
+    document.getElementById("high_scores").classList.add("hidden") // Hide the form
     playAgainButton()
     return
   }
@@ -456,7 +456,7 @@ document.getElementById("highScoresForm").addEventListener("submit", async funct
       // console.log("High score submitted successfully:", result)
       await fetchLeaderboard()
       populateLeaderboard()
-      document.getElementById("high_scores").style.display = "none" // Hide the form
+      document.getElementById("high_scores").classList.add("hidden") // Hide the form
       playAgainButton()
       return response
     } catch (error) {
