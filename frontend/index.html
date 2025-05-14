@@ -24,31 +24,31 @@
   </head>
 
   <body
-    class="flex flex-col md:pt-8 items-center justify-start min-h-screen bg-cover bg-center"
+    class="flex flex-col lg:pt-8 items-center justify-start min-h-screen bg-cover bg-center"
     style="background-image: url('images/background.jpg')"
   >
     <div class="">
       <div
         id="gameCanvas"
-        class="relative lg:w-[800px] lg:h-[635px] md:w-[750px] md:h-[600px] w-screen h-screen md:mt-5 bg-black rounded-md shadow-lg overflow-hidden"
+        class="relative lg:w-[800px] lg:h-[635px] w-screen h-screen lg:mt-5 bg-black rounded-lg shadow-lg overflow-hidden"
       >
         <div id="gameMenu" class="absolute right-0 left-0 hidden">
           <div class="flex justify-center items-center gap-4 sm:mt-10">
-            <img src="images/fruit.png" alt="fruit" class="md:w-[358px] md:h-[195px] w-[200px] h-[95px]" />
-            <img src="images/ninja.png" alt="ninja" class="md:w-[318px] md:h-[165px] w-[218px] h-[90px] mt-5" />
-            <img src="images/game-over.png" alt="gameOver" class="md:w-[500px] md:h-[140px] w-[300px] h-[75px] mt-8 hidden" />
+            <img src="images/fruit.png" alt="fruit" class="lg:w-[358px] lg:h-[195px] w-[200px] h-[95px]" />
+            <img src="images/ninja.png" alt="ninja" class="lg:w-[318px] lg:h-[165px] w-[218px] h-[90px] mt-5" />
+            <img src="images/game-over.png" alt="gameOver" class="lg:w-[500px] lg:h-[140px] w-[300px] h-[75px] mt-8 hidden" />
           </div>
-          <div id="playGameContainer" class="relative w-full md:h-[400px] max-md:mt-32 flex items-center justify-center">
-            <img src="images/new-game.png" alt="newgame" class="playGame absolute md:w-[200px] md:h-[200px] w-[150px] h-[150px]" />
-            <img src="images/fruitMode.png" alt="fruitMode" class="playGame absolute md:w-[90px] md:h-[90px] w-[70px] h-[70px]" />
+          <div id="playGameContainer" class="relative w-full lg:h-[400px] max-lg:mt-32 flex items-center justify-center">
+            <img src="images/new-game.png" alt="newgame" class="playGame absolute lg:w-[200px] lg:h-[200px] w-[150px] h-[150px]" />
+            <img src="images/fruitMode.png" alt="fruitMode" class="playGame absolute lg:w-[90px] lg:h-[90px] w-[70px] h-[70px]" />
           </div>
         </div>
-        <div id="logout" class="absolute top-52 left-2 bg-gradient-to-b from-orange-200 to-orange-400 p-3 rounded-3xl w-32 hidden">
+        <div id="logout" class="absolute top-52 right-2 bg-gradient-to-b from-orange-200 to-orange-400 p-3 rounded-3xl w-32 hidden">
           <button id="logout-button" class="w-full py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 w-20">Logout</button>
         </div>
         <div
           id="open_dashboard"
-          class="absolute top-52 right-2 bg-gradient-to-b from-orange-200 to-orange-400 p-3 rounded-3xl w-32 md:hidden"
+          class="absolute bottom-5 right-2 bg-gradient-to-b from-orange-200 to-orange-400 p-3 rounded-3xl w-32 lg:hidden"
         >
           <button id="leaderboardOpenButton" class="w-full py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 w-20">
             Leaderboard
@@ -97,8 +97,7 @@
     
       <div
       id="high_scores"
-      class="absolute inset-0 flex items-center justify-center z-10 hidden"
-    >
+      class="absolute inset-0 flex items-center justify-center z-10 hidden">
     <div class="bg-gradient-to-b from-orange-200 to-orange-400 w-[50%] max-w-md bg-black bg-opacity-80 p-5 rounded-3xl">
         <div class="relative h-12 mb-4 mt-3 px-3 flex items-center justify-center w-full">
           <div class="absolute inset-0 bg-red-400 rounded-full transform -skew-y-1 shadow-md"></div>
@@ -151,10 +150,10 @@
     </div>
   <div
       id="leaderboard"
-      class="absolute space-y-3 md:w-96 w-full bottom-2 left-2 max-md:left-1/2 max-md:transform max-md:-translate-x-1/2 bg-gradient-to-b from-orange-200 to-orange-300 rounded-3xl p-3 shadow-xl hidden"
+      class="absolute space-y-3 lg:w-96 w-full bottom-2 left-2 max-lg:left-1/2 max-lg:transform max-lg:-translate-x-1/2 bg-gradient-to-b from-orange-200 to-orange-300 rounded-3xl p-3 shadow-xl hidden"
     >
     <!-- Close leaderboard button  -->
-    <button id="leaderboardCloseButton" class="absolute top-3 right-1 text-orange-500 hover:text-orange-700 md:hidden">
+    <button id="leaderboardCloseButton" class="absolute top-3 right-1 text-orange-500 hover:text-orange-700 lg:hidden">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -163,9 +162,9 @@
   
       <!-- Header -->
       <div class="relative h-12 mt-3 mx-3 flex items-center justify-center">
-        <div class="absolute inset-0 bg-red-400 rounded-full transform -skew-y-1 shadow-md"></div>
-        <div class="absolute inset-0 bg-red-500 rounded-full transform skew-y-1 shadow-md"></div>
-        <h1 class="relative text-3xl text-shadow-lg font-extrabold text-white tracking-wider drop-shadow-md">LEADERBOARD</h1>
+        <div class="absolute inset-0 bg-red-400 rounded-full transform -skew-y-1 shadow-lg"></div>
+        <div class="absolute inset-0 bg-red-500 rounded-full transform skew-y-1 shadow-lg"></div>
+        <h1 class="relative text-3xl text-shadow-lg font-extrabold text-white tracking-wider drop-shadow-lg">LEADERBOARD</h1>
       </div>
 
       <!-- Leaderboard entries -->
@@ -173,7 +172,7 @@
         <!-- <div>
                 <button id="reset_leaderboard" class="py-1 px-4 bg-red-500 text-white rounded-xl hover:bg-orange-600">Reset</button>
         </div> -->
-        <div id="leaderboard-rows" class="md:space-y-1 max-md:grid max-md:grid-flow-col max-md:grid-rows-5 gap-1">
+        <div id="leaderboard-rows" class="lg:space-y-1 max-lg:grid max-lg:grid-flow-col max-lg:grid-rows-5 gap-1">
           <!-- Rows will be inserted here by JavaScript -->
         </div>
       </div>

@@ -133,7 +133,6 @@ async function setup() {
 
   masterVolume(0)
   await fetchLeaderboard()
-
   const showLogin = session
   if (!showLogin) {
     showLoginForm()
@@ -625,7 +624,7 @@ function populateLeaderboard() {
 document.addEventListener("DOMContentLoaded", async function () {
   await fetchLeaderboard()
   session = await fetchLocationsSession()
-  console.log("first time")
+
   populateLeaderboard() // Populate leaderboard on page load
 })
 
@@ -649,16 +648,18 @@ function checkOrientation() {
   const overlay = document.getElementById("rotate-portrait-overlay")
   const isMobile = window.matchMedia("(max-width: 767px)").matches
   const isPortrait = window.matchMedia("(orientation: portrait)").matches
-
+  console.log(isMobile, isPortrait)
   if (isMobile && isPortrait) {
     overlay.classList.remove("hidden")
     overlay.classList.add("flex")
     document.body.style.overflow = "hidden"
     document.getElementById("leaderboard").style.display = "none"
+     openDashboardButton.style.display = "block"
   } else {
     overlay.classList.add("hidden")
     overlay.classList.remove("flex")
     document.body.style.overflow = ""
+    openDashboardButton.style.display = "none"
     if (session) {
       document.getElementById("leaderboard").style.display = "block"
     }
