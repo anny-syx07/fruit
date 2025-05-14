@@ -24,6 +24,7 @@ let fruitsSlicedPerPress = 0 // Counter for fruits sliced per mouse press
 
 const playGameContainer = document.getElementById("playGameContainer")
 const logoutButtonBody = document.getElementById("logout")
+const openDashboardButton = document.getElementById("open_dashboard")
 
 function preload() {
   // LOAD SOUNDS
@@ -139,6 +140,7 @@ async function setup() {
   } else {
     drawLeaderboard()
     logoutButtonBody.style.display = "block"
+    openDashboardButton.style.display = "block"
   }
 }
 
@@ -174,6 +176,7 @@ function game() {
   // gameMenu.classList.add("hidden")
   showGameMenu(0, 1)
   logoutButtonBody.style.display = "none"
+  openDashboardButton.style.display = "none"
   document.getElementById("leaderboard").style.display = "none"
 
   if (mouseIsPressed) {
@@ -537,6 +540,7 @@ function drawLeaderboard() {
   const leaderboard = document.getElementById("leaderboard")
   leaderboard.style.display = "block"
   logoutButtonBody.style.display = "block"
+  openDashboardButton.style.display = "block"
 }
 
 //close leaderboard button
