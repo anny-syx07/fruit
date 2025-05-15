@@ -100,6 +100,14 @@ async function fetchLocationsSession() {
   }
 }
 
+// Keep the DOMContentLoaded event listener for initial population
+document.addEventListener("DOMContentLoaded", async function () {
+  await fetchLeaderboard()
+  session = await fetchLocationsSession()
+
+  populateLeaderboard() // Populate leaderboard on page load
+})
+
 async function useAddNewHighScores({ email, score }) {
   try {
     const response = await fetch(`http://localhost:3000/highscores`, {
@@ -137,9 +145,9 @@ async function setup() {
   if (!showLogin) {
     showLoginForm()
   } else {
-    drawLeaderboard()
-    logoutButtonBody.style.display = "block"
-    openDashboardButton.style.display = "block"
+    drawLeaderboard({isHidden: 0})
+    ShowLogoutButton({isHidden: 0})
+    ShowLeaderboardButton({isHidden: 0})
   }
 }
 
@@ -174,9 +182,9 @@ function game() {
   background(bg) 
   // gameMenu.classList.add("hidden")
   showGameMenu(0, 1)
-  logoutButtonBody.style.display = "none"
-  openDashboardButton.style.display = "none"
-  document.getElementById("leaderboard").style.display = "none"
+  ShowLogoutButton({isHidden: 1})
+  ShowLeaderboardButton({isHidden: 1})
+  drawLeaderboard({isHidden: 1})
 
   if (mouseIsPressed) {
     // Reset the counter when the mouse is pressed
@@ -313,7 +321,9 @@ function addNewHighScores() {
 }
 
 function playAgainButton() {
-  drawLeaderboard()
+  drawLeaderboard({isHidden: 0})
+  ShowLogoutButton({isHidden: 0})
+  ShowLeaderboardButton({isHidden: 0})
 
   showGameMenu(1, 0)
   cnv.mouseClicked(() => {
@@ -356,12 +366,10 @@ function showGameMenu(gameOver = 0, isHidden = 0) {
     ninja_img.classList.remove("hidden")
   }
 
-  // document.getElementById("leaderboard").style.display = "none"
 }
 
 // Show the login form
 function showLoginForm() {
-  console.log("Hello showLoginForm")
   const loginForm = document.getElementById("login-form")
   loginForm.classList.remove("hidden")
   document.getElementById("leaderboard").style.display = "none"
@@ -392,9 +400,10 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       alert("Login successful!")
       await fetchLeaderboard()
       populateLeaderboard()
-      console.log(data)
       document.getElementById("login-form").classList.add("hidden") // Hide the form
-      drawLeaderboard()
+      drawLeaderboard({isHidden: 0})
+      ShowLogoutButton({isHidden: 0})
+      ShowLeaderboardButton({isHidden: 0})
     } else {
       alert("Login failed. Please check your credentials.")
     }
@@ -413,9 +422,11 @@ document.getElementById("logout-button").addEventListener("click", async functio
 
     if (response.ok) {
       alert("Logout successful!")
+      session = null;
       document.getElementById("login-form").classList.remove("hidden")
-      document.getElementById("leaderboard").style.display = "none"
-      document.getElementById("logout").style.display = "none"
+      ShowLogoutButton({isHidden: 1})
+      ShowLeaderboardButton({isHidden: 1})
+      drawLeaderboard({isHidden: 1})
     } else {
       alert("Logout failed. Please try again.")
     }
@@ -531,15 +542,44 @@ function mouseDragged() {
   return false // <-- Prevents default dragging behavior
 }
 
-function drawLeaderboard() {
+function ShowLogoutButton({isHidden = 0}) {
+  const logoutButton = document.getElementById("logout")
+  if (isHidden) {
+    logoutButton.style.display = "none"
+  }else{
+    logoutButton.style.display = "block"
+  }
+}
+
+function ShowLeaderboardButton({isHidden = 0}) {
+  const isMobilelandscape = window.matchMedia("(max-height: 430px)").matches
+  const leaderboardButton = document.getElementById("open_dashboard")
+
+  if (!isMobilelandscape) {
+    leaderboardButton.style.display = "none"
+    return // Don't show leaderboard button
+  }
+  
+  if (isHidden) {
+    leaderboardButton.style.display = "none"
+  }else{
+    leaderboardButton.style.display = "block"
+  }
+}
+
+function drawLeaderboard({isHidden = 0}) {
   const isMobile = window.matchMedia("(max-width: 767px)").matches
   const isPortrait = window.matchMedia("(orientation: portrait)").matches
   if (isMobile && isPortrait) return // Don't show leaderboard on mobile portrait
 
   const leaderboard = document.getElementById("leaderboard")
-  leaderboard.style.display = "block"
-  logoutButtonBody.style.display = "block"
-  openDashboardButton.style.display = "block"
+
+  if (isHidden) {
+    leaderboard.style.display = "none"
+  }else{
+    leaderboard.style.display = "block"
+  }
+
 }
 
 //close leaderboard button
@@ -620,14 +660,6 @@ function populateLeaderboard() {
   showModal();
 }); */
 
-// Keep the DOMContentLoaded event listener for initial population
-document.addEventListener("DOMContentLoaded", async function () {
-  await fetchLeaderboard()
-  session = await fetchLocationsSession()
-
-  populateLeaderboard() // Populate leaderboard on page load
-})
-
 // Function to draw the timer on the screen
 function drawTimer() {
   textAlign(CENTER)
@@ -648,18 +680,18 @@ function checkOrientation() {
   const overlay = document.getElementById("rotate-portrait-overlay")
   const isMobile = window.matchMedia("(max-width: 767px)").matches
   const isPortrait = window.matchMedia("(orientation: portrait)").matches
-  console.log(isMobile, isPortrait)
+
   if (isMobile && isPortrait) {
     overlay.classList.remove("hidden")
     overlay.classList.add("flex")
     document.body.style.overflow = "hidden"
     document.getElementById("leaderboard").style.display = "none"
-     openDashboardButton.style.display = "block"
+    // openDashboardButton.style.display = "block"
   } else {
     overlay.classList.add("hidden")
     overlay.classList.remove("flex")
     document.body.style.overflow = ""
-    openDashboardButton.style.display = "none"
+    // openDashboardButton.style.display = "none"
     if (session) {
       document.getElementById("leaderboard").style.display = "block"
     }
