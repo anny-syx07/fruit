@@ -192,7 +192,7 @@ function game() {
     //   fruitsSlicedPerPress = 0;
     // }
     // Draw sword
-    console.log("mouseIsPressed")
+
     sword.swipe(mouseX, mouseY)
   }
 
@@ -284,12 +284,15 @@ function mouseReleased() {
 }
 
 function drawScore() {
-  image(this.scoreImg, 10, 10, 40, 40)
-  textAlign(LEFT)
-  noStroke()
-  fill(255, 147, 21)
-  textSize(50)
-  text(score, 50, 50)
+  const responsiveImageSize = Math.min(width, height) * 0.07; // Adjust image size based on canvas dimensions
+  const responsiveTextSize = Math.min(width, height) * 0.07; // Adjust text size based on canvas dimensions
+
+  image(this.scoreImg, 10, 10, responsiveImageSize, responsiveImageSize);
+  textAlign(LEFT);
+  noStroke();
+  fill(255, 147, 21);
+  textSize(responsiveTextSize);
+  text(score, 10 + responsiveImageSize + 5, 7 + responsiveTextSize); // Position text next to the image
 }
 
 function gameOver() {
@@ -634,40 +637,16 @@ function populateLeaderboard() {
   })
 }
 
-/* document.addEventListener("DOMContentLoaded", () => {
-  const confirmResetModal = document.getElementById("confirm_reset");
-  const overlay = document.getElementById("overlay");
-  const cancelButton = document.getElementById("cancel");
-
-  // Function to show the modal
-  function showModal() {
-      confirmResetModal.classList.add("show");
-      overlay.classList.remove("hidden");
-      overlay.style.display = "block";
-  }
-
-  // Function to hide the modal
-  function hideModal() {
-      confirmResetModal.classList.remove("show");
-      overlay.classList.add("hidden");
-      overlay.style.display = "none";
-  }
-
-  // Attach event listeners
-  cancelButton.addEventListener("click", hideModal);
-
-  // Example: Show the modal (you can trigger this based on your logic)
-  showModal();
-}); */
-
 // Function to draw the timer on the screen
 function drawTimer() {
   textAlign(CENTER)
   noStroke()
   fill(255, 147, 21)
-  textSize(50)
-  text(`Time: ${timerValue}`, width / 2, 50)
+  const responsiveTextSize = Math.min(width, height) * 0.05 // Adjust text size based on canvas dimensions
+  textSize(responsiveTextSize)
+  text(`Time: ${timerValue}`, width / 2, responsiveTextSize + 10) // Position text slightly below the top
 }
+
 // Decrement the timer every second
 setInterval(() => {
   if (isPlay && timerValue > 0) {
